@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: telegram-referral-bot
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BOT_TOKEN
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: ADMIN_USERNAME
+        value: youbtech
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: YOUTUBE_CHANNEL_URL
+        value: https://youtube.com/@error_amn?si=BJ8yvX6cedErf8QZ
+      - key: YOUTUBE_CHANNEL_ID
+        value: "@error_amn"
+      - key: REFERRAL_REWARD
+        value: "5"
+      - key: MIN_WITHDRAWAL_AMOUNT
+        value: "100"
+      - key: BOT_URL
+        value: https://t.me/Referneww_bot
+      - key: BOT_USERNAME
+        value: Referneww_bot
+

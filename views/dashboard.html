@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ReferLootBot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .sidebar-active {
+            transform: translateX(0);
+        }
+        .sidebar-inactive {
+            transform: translateX(-100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        .nav-link.active::before {
+            transform: scaleY(1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .status-badge {
+            position: relative;
+            overflow: hidden;
+        }
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        .status-badge:hover::before {
+            left: 100%;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .sidebar-gradient {
+            background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
+        }
+        .header-shadow {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+        }
+        .table-row:hover {
+            background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        .icon-bounce {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 sidebar-gradient shadow-2xl transform sidebar-active lg:sidebar-active transition-transform duration-300 ease-in-out">
+        <div class="flex items-center justify-between h-16 px-6 bg-gradient-to-r from-indigo-600 to-purple-600">
+            <div class="flex items-center">
+                <i class="fas fa-robot text-white text-xl mr-3 icon-bounce"></i>
+                <span class="text-white font-bold text-lg">ReferLootBot</span>
+            </div>
+            <button id="closeSidebar" class="text-white lg:hidden hover:text-gray-200 transition-colors" onclick="closeMobileMenu()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <nav class="mt-8">
+            <a href="#" onclick="showSection('overview')" class="nav-link flex items-center px-6 py-4 text-gray-300 hover:bg-slate-700 hover:text-white transition-all duration-200 active">
+                <i class="fas fa-chart-line mr-3 text-lg"></i>
+                <span class="font-medium">Overview</span>
+            </a>
+            <a href="#" onclick="showSection('users')" class="nav-link flex items-center px-6 py-4 text-gray-300 hover:bg-slate-700 hover:text-white transition-all duration-200">
+                <i class="fas fa-users mr-3 text-lg"></i>
+                <span class="font-medium">Users</span>
+            </a>
+            <a href="#" onclick="showSection('withdrawals')" class="nav-link flex items-center px-6 py-4 text-gray-300 hover:bg-slate-700 hover:text-white transition-all duration-200">
+                <i class="fas fa-money-bill-wave mr-3 text-lg"></i>
+                <span class="font-medium">Withdrawals</span>
+            </a>
+            <a href="#" onclick="showSection('analytics')" class="nav-link flex items-center px-6 py-4 text-gray-300 hover:bg-slate-700 hover:text-white transition-all duration-200">
+                <i class="fas fa-chart-bar mr-3 text-lg"></i>
+                <span class="font-medium">Analytics</span>
+            </a>
+        </nav>
+
+        <div class="absolute bottom-0 w-full p-6">
+            <button onclick="logout()" class="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                <i class="fas fa-sign-out-alt mr-2"></i>
+                <span class="font-medium">Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="transition-all duration-300 ease-in-out ml-64">
+        <!-- Header -->
+        <header class="bg-white header-shadow border-b border-gray-200">
+            <div class="flex items-center justify-between h-16 px-6">
+                <div class="flex items-center">
+                    <button id="openSidebar" class="text-gray-500 lg:hidden mr-4 hover:text-gray-700 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <button id="toggleSidebar" class="text-gray-500 hidden lg:block mr-4 hover:text-gray-700 transition-colors p-2 rounded-lg hover:bg-gray-100">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h1 id="pageTitle" class="text-2xl font-bold text-gray-800 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Overview</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="refreshBtn" onclick="refreshData()" class="p-3 text-gray-500 hover:text-gray-700 transition-colors rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-sync-alt text-lg"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600 bg-gray-50 px-4 py-2 rounded-lg">
+                        <i class="fas fa-user-shield mr-2 text-indigo-600"></i>
+                        <span id="adminUsername" class="font-medium">Admin</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="p-6">
+            <!-- Overview Section -->
+            <div id="overviewSection" class="section">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Stats Cards -->
+                    <div class="stat-card rounded-xl shadow-lg p-6 card-hover">
+                        <div class="flex items-center">
+                            <div class="p-4 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
+                                <i class="fas fa-users text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Users</p>
+                                <p id="totalUsers" class="text-3xl font-bold text-gray-900">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card rounded-xl shadow-lg p-6 card-hover">
+                        <div class="flex items-center">
+                            <div class="p-4 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg">
+                                <i class="fas fa-user-check text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Active Users</p>
+                                <p id="activeUsers" class="text-3xl font-bold text-gray-900">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card rounded-xl shadow-lg p-6 card-hover">
+                        <div class="flex items-center">
+                            <div class="p-4 rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-600 text-white shadow-lg">
+                                <i class="fas fa-rupee-sign text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Earnings</p>
+                                <p id="totalEarnings" class="text-3xl font-bold text-gray-900">₹0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card rounded-xl shadow-lg p-6 card-hover">
+                        <div class="flex items-center">
+                            <div class="p-4 rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg">
+                                <i class="fas fa-clock text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Pending Withdrawals</p>
+                                <p id="pendingWithdrawals" class="text-3xl font-bold text-gray-900">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-lg card-hover">
+                        <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-t-xl">
+                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-users mr-3 text-indigo-600"></i>
+                                Recent Users
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div id="recentUsers" class="space-y-4">
+                                <!-- Recent users will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg card-hover">
+                        <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50 rounded-t-xl">
+                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-money-bill-wave mr-3 text-green-600"></i>
+                                Recent Withdrawals
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div id="recentWithdrawals" class="space-y-4">
+                                <!-- Recent withdrawals will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="usersSection" class="section hidden">
+                <div class="bg-white rounded-xl shadow-lg card-hover">
+                    <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-users mr-3 text-blue-600"></i>
+                                User Management
+                            </h3>
+                            <div class="flex items-center space-x-4">
+                                <input type="text" id="userSearch" placeholder="Search users..." class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                <button onclick="exportUsers()" class="btn-primary px-6 py-2 text-white rounded-lg font-medium shadow-lg">
+                                    <i class="fas fa-download mr-2"></i>Export
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Referrals</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Balance</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">UPI ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable" class="bg-white divide-y divide-gray-200">
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Withdrawals Section -->
+            <div id="withdrawalsSection" class="section hidden">
+                <div class="bg-white rounded-xl shadow-lg card-hover">
+                    <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50 rounded-t-xl">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-money-bill-wave mr-3 text-green-600"></i>
+                                Withdrawal Requests
+                            </h3>
+                            <div class="flex items-center space-x-4">
+                                <select id="withdrawalFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                    <option value="all">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">UPI ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="withdrawalsTable" class="bg-white divide-y divide-gray-200">
+                                <!-- Withdrawals will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analyticsSection" class="section hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                            <i class="fas fa-chart-line mr-3 text-blue-600"></i>
+                            User Growth
+                        </h3>
+                        <canvas id="userGrowthChart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                            <i class="fas fa-chart-pie mr-3 text-green-600"></i>
+                            Withdrawal Status
+                        </h3>
+                        <canvas id="withdrawalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- User Details Modal -->
+    <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold">User Details</h3>
+                <button onclick="closeModal('userModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="userModalContent">
+                <!-- User details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Action Modal -->
+    <div id="withdrawalModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold">Process Withdrawal</h3>
+                <button onclick="closeModal('withdrawalModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="withdrawalModalContent">
+                <!-- Withdrawal details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
+
