@@ -129,7 +129,7 @@
 
     <!-- JavaScript -->
     <script type="module">
-        // Inline styles for this specific page
+        // --- YAHAN KOI BADLAV NAHI ---
         const productDetailStyles = `
             .product-detail-layout {}
             .product-image-container { padding: 0; overflow: hidden; aspect-ratio: 16/9; }
@@ -206,7 +206,12 @@
             document.getElementById('product-price').textContent = `₹${product.price.toLocaleString('en-IN')}`;
             
             const productImage = document.getElementById('product-image');
-            productImage.src = product.imageUrl || 'https://via.placeholder.com/600x400?text=Code';
+            
+            // --- YAHAN BADLAV KIYA GAYA HAI ---
+            // Ab yeh code `imageUrl` aur `image` dono ko check karega.
+            productImage.src = product.imageUrl || product.image || 'https://via.placeholder.com/600x400?text=Code';
+            // --- BADLAV KHATAM ---
+            
             productImage.alt = product.title;
             productImage.onerror = function() {
                 this.src = 'https://via.placeholder.com/600x400?text=Code';
@@ -225,7 +230,7 @@
             if (!currentProduct) return;
 
             const options = {
-                key: 'rzp_test_lkoFfNbWaRVyLf', // Replace with your live Key ID in production
+                key: 'rzp_test_lkoFfNbWaRVyLf',
                 amount: currentProduct.price * 100,
                 currency: 'INR',
                 name: 'CodeMarket',
