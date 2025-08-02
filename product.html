@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- RAZORPAY SCRIPT -->
+    <!-- Razorpay Script -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
@@ -76,9 +76,6 @@
                         <button id="buy-now-btn" class="btn-primary btn-large">
                             <i class="fas fa-shopping-cart"></i> Buy Now
                         </button>
-                        
-                        <!-- Payment Status -->
-                        <div id="payment-status" style="display: none; margin-top: 1rem; padding: 1rem; border-radius: 8px; text-align: center;"></div>
                     </div>
                 </div>
             </div>
@@ -131,13 +128,9 @@
         </div>
     </footer>
 
-    <!-- COMPLETE WORKING JAVASCRIPT -->
+    <!-- SIMPLE WORKING JAVASCRIPT - ORIGINAL STYLE -->
     <script type="module">
         import { productService, utils } from './js/firebase-config.js';
-
-        // YOUR ACTUAL RAZORPAY KEYS
-        const RAZORPAY_KEY_ID = 'rzp_test_lkoFfNbWaRVyLf';
-        const RAZORPAY_KEY_SECRET = 'CZeKvVHB8NClelJCTMDD2cc4';
 
         // DOM Elements
         const loadingDiv = document.getElementById('loading');
@@ -148,9 +141,8 @@
         const productPrice = document.getElementById('product-price');
         const productDescription = document.getElementById('product-description');
         const buyNowBtn = document.getElementById('buy-now-btn');
-        const paymentStatus = document.getElementById('payment-status');
 
-        // Store current product
+        // Current product storage
         let currentProduct = null;
 
         // Get product ID from URL
@@ -170,14 +162,12 @@
 
             try {
                 showLoading();
-                
                 const result = await productService.getProduct(productId);
                 
                 if (result.success && result.product) {
                     currentProduct = result.product;
                     displayProduct(result.product);
                 } else {
-                    console.error('Product fetch failed:', result.error);
                     showNotFound();
                 }
             } catch (error) {
@@ -190,9 +180,10 @@
         function displayProduct(product) {
             hideLoading();
             
+            // Update page title
             document.title = `${product.title || product.name} - CodeStore`;
             
-            // Display product image - FIXED
+            // Display product image - MAIN FIX FOR IMAGE ISSUE
             if (product.imageUrl || product.image) {
                 productImage.src = product.imageUrl || product.image;
                 productImage.alt = product.title || product.name;
@@ -205,213 +196,100 @@
                 productImage.src = 'https://via.placeholder.com/500x400/6366f1/white?text=No+Image';
             }
             
+            // Display other details
             productTitle.textContent = product.title || product.name || 'Untitled Product';
             productPrice.textContent = utils.formatCurrency(product.price || 0);
             productDescription.textContent = product.description || 'No description available.';
             
-            // Setup buy button
+            // Setup buy button - SIMPLE IMPLEMENTATION
             if (buyNowBtn) {
-                buyNowBtn.onclick = () => initiatePayment(product);
+                buyNowBtn.onclick = () => buyNow(product);
             }
             
             productContainer.style.display = 'block';
             console.log('Product displayed:', product);
         }
 
-        // CREATE RAZORPAY ORDER (Client-side for testing)
-        async function createRazorpayOrder(amount, currency = 'INR') {
-            // For production, this should be done on server-side
-            // For testing purposes, we'll create a mock order
-            const orderId = 'order_' + Date.now() + Math.random().toString(36).substr(2, 9);
-            
-            return {
-                id: orderId,
-                amount: amount * 100, // Amount in paise
-                currency: currency,
-                receipt: 'receipt_' + Date.now()
-            };
-        }
-
-        // FIXED RAZORPAY PAYMENT INTEGRATION
-        async function initiatePayment(product) {
+        // SIMPLE RAZORPAY IMPLEMENTATION - LIKE ORIGINAL
+        function buyNow(product) {
             if (!window.Razorpay) {
-                showPaymentStatus('Payment gateway not loaded. Please refresh the page.', 'error');
+                alert('Payment gateway not available. Please refresh the page.');
                 return;
             }
 
-            try {
-                // Show processing
-                buyNowBtn.disabled = true;
-                buyNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            // Simple Razorpay options - NO COMPLEX ORDER CREATION
+            const options = {
+                key: 'rzp_test_lkoFfNbWaRVyLf', // Your test key
+                amount: (product.price || 70) * 100, // Amount in paise
+                currency: 'INR',
+                name: 'CodeStore',
+                description: product.title || product.name,
+                image: 'https://cdn-icons-png.flaticon.com/512/1006/1006555.png',
                 
-                // Create order
-                const order = await createRazorpayOrder(product.price || 70);
-                console.log('Order created:', order);
-
-                const options = {
-                    key: RAZORPAY_KEY_ID, // Your actual test key
-                    amount: order.amount, // Amount in paise
-                    currency: order.currency,
-                    name: "CodeStore",
-                    description: `${product.title || product.name}`,
-                    image: "https://cdn-icons-png.flaticon.com/512/1006/1006555.png",
-                    order_id: order.id,
+                // Success handler - SIMPLE
+                handler: function(response) {
+                    console.log('Payment Success:', response);
                     
-                    // SUCCESS HANDLER - MAIN FIX
-                    handler: function (response) {
-                        console.log('Payment Success:', response);
-                        handlePaymentSuccess(response, product, order);
-                    },
+                    // Show success alert
+                    alert(`🎉 Payment Successful!\n\nPayment ID: ${response.razorpay_payment_id}\n\nRedirecting to download...`);
                     
-                    // PREFILL DATA
-                    prefill: {
-                        name: "Test Customer",
-                        email: "test@example.com",
-                        contact: "9999999999"
-                    },
-                    
-                    // NOTES
-                    notes: {
+                    // Store payment data
+                    const paymentData = {
+                        payment_id: response.razorpay_payment_id,
                         product_id: product.id,
-                        product_name: product.title || product.name
-                    },
+                        product_title: product.title || product.name,
+                        amount: product.price,
+                        timestamp: new Date().toISOString()
+                    };
                     
-                    // THEME
-                    theme: {
-                        color: "#6D28D9"
-                    },
+                    localStorage.setItem('payment_' + response.razorpay_payment_id, JSON.stringify(paymentData));
                     
-                    // MODAL OPTIONS
-                    modal: {
-                        ondismiss: function() {
-                            console.log('Payment modal closed');
-                            resetBuyButton();
-                        }
-                    },
-                    
-                    // RETRY OPTIONS - IMPORTANT FOR FAILURE HANDLING
-                    retry: {
-                        enabled: true,
-                        max_count: 3
-                    },
-                    
-                    // TIMEOUT
-                    timeout: 300, // 5 minutes
-                    
-                    // REMEMBER CUSTOMER
-                    remember_customer: false
-                };
+                    // Redirect to download page
+                    setTimeout(() => {
+                        window.location.href = `download.html?payment_id=${response.razorpay_payment_id}&product_id=${product.id}`;
+                    }, 2000);
+                },
+                
+                // Prefill customer data
+                prefill: {
+                    name: 'Customer',
+                    email: 'customer@example.com',
+                    contact: '9999999999'
+                },
+                
+                // Theme
+                theme: {
+                    color: '#6D28D9'
+                },
+                
+                // Modal close handler
+                modal: {
+                    ondismiss: function() {
+                        console.log('Payment cancelled by user');
+                    }
+                }
+            };
 
-                // Create Razorpay instance
+            try {
+                // Create and open Razorpay
                 const rzp = new Razorpay(options);
                 
-                // PAYMENT FAILED HANDLER - MAIN FIX
-                rzp.on('payment.failed', function (response) {
-                    console.error('Payment Failed:', response);
-                    handlePaymentFailure(response);
+                // Payment failed handler - SIMPLE
+                rzp.on('payment.failed', function(response) {
+                    console.error('Payment failed:', response);
+                    alert(`❌ Payment Failed!\n\nError: ${response.error.description || 'Please try again'}`);
                 });
                 
-                // OPEN PAYMENT MODAL
+                // Open payment gateway
                 rzp.open();
                 
             } catch (error) {
-                console.error('Payment initiation error:', error);
-                showPaymentStatus('Unable to initialize payment. Please try again.', 'error');
-                resetBuyButton();
+                console.error('Razorpay error:', error);
+                alert('Payment gateway error. Please try again.');
             }
         }
 
-        // HANDLE PAYMENT SUCCESS
-        function handlePaymentSuccess(response, product, order) {
-            console.log('Payment successful!', response);
-            
-            // Store payment data
-            const paymentData = {
-                payment_id: response.razorpay_payment_id,
-                order_id: response.razorpay_order_id || order.id,
-                signature: response.razorpay_signature,
-                product_id: product.id,
-                product_title: product.title || product.name,
-                amount: product.price,
-                timestamp: new Date().toISOString()
-            };
-            
-            localStorage.setItem('payment_' + response.razorpay_payment_id, JSON.stringify(paymentData));
-            
-            // Show success message
-            showPaymentStatus(
-                `🎉 Payment Successful!<br>
-                <small>Payment ID: ${response.razorpay_payment_id}</small><br>
-                <small>Redirecting to download...</small>`, 
-                'success'
-            );
-            
-            // Redirect after 3 seconds
-            setTimeout(() => {
-                window.location.href = `download.html?payment_id=${response.razorpay_payment_id}&product_id=${product.id}`;
-            }, 3000);
-        }
-
-        // HANDLE PAYMENT FAILURE - IMPROVED ERROR HANDLING
-        function handlePaymentFailure(response) {
-            console.error('Payment failed:', response);
-            
-            let errorMessage = 'Payment Failed! ❌<br>';
-            
-            if (response.error) {
-                const error = response.error;
-                
-                // Handle specific error codes
-                switch(error.code) {
-                    case 'PAYMENT_TIMED_OUT':
-                        errorMessage += 'Payment timed out. Please try again.';
-                        break;
-                    case 'PAYMENT_CANCELLED':
-                        errorMessage += 'Payment was cancelled.';
-                        break;
-                    case 'INSUFFICIENT_FUNDS':
-                        errorMessage += 'Insufficient funds in your account.';
-                        break;
-                    case 'CARD_DECLINED':
-                        errorMessage += 'Your card was declined. Please try another card.';
-                        break;
-                    case 'AUTHENTICATION_FAILED':
-                        errorMessage += 'Authentication failed. Please verify your details.';
-                        break;
-                    default:
-                        errorMessage += error.description || 'Please try again or contact support.';
-                }
-                
-                errorMessage += `<br><small>Error Code: ${error.code}</small>`;
-            } else {
-                errorMessage += 'Unknown error occurred. Please try again.';
-            }
-            
-            showPaymentStatus(errorMessage, 'error');
-            resetBuyButton();
-        }
-
-        // SHOW PAYMENT STATUS
-        function showPaymentStatus(message, type) {
-            paymentStatus.innerHTML = message;
-            paymentStatus.className = `payment-status-${type}`;
-            paymentStatus.style.display = 'block';
-            
-            // Auto hide after 10 seconds for errors
-            if (type === 'error') {
-                setTimeout(() => {
-                    paymentStatus.style.display = 'none';
-                }, 10000);
-            }
-        }
-
-        // RESET BUY BUTTON
-        function resetBuyButton() {
-            buyNowBtn.disabled = false;
-            buyNowBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Buy Now';
-        }
-
-        // Show/Hide loading states
+        // Show/Hide functions
         function showLoading() {
             loadingDiv.style.display = 'block';
             notFoundDiv.style.display = 'none';
@@ -432,52 +310,9 @@
         document.addEventListener('DOMContentLoaded', loadProductDetails);
         
         // Debug info
-        console.log('=== RAZORPAY DEBUG INFO ===');
-        console.log('Key ID:', RAZORPAY_KEY_ID);
-        console.log('Razorpay loaded:', !!window.Razorpay);
+        console.log('=== CodeStore Product Page ===');
         console.log('Product ID:', getProductIdFromUrl());
-        console.log('Current URL:', window.location.href);
+        console.log('Razorpay loaded:', !!window.Razorpay);
     </script>
-
-    <!-- ADDITIONAL CSS FOR PAYMENT STATUS -->
-    <style>
-        .payment-status-success {
-            background: linear-gradient(135deg, #10B981, #059669);
-            color: white;
-            border: 1px solid #10B981;
-        }
-        
-        .payment-status-error {
-            background: linear-gradient(135deg, #EF4444, #DC2626);
-            color: white;
-            border: 1px solid #EF4444;
-        }
-        
-        #payment-status {
-            border-radius: 8px;
-            padding: 1rem;
-            font-weight: 500;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .fa-spin {
-            animation: fa-spin 1s infinite linear;
-        }
-        
-        @keyframes fa-spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
 </body>
 </html>
