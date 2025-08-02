@@ -9,80 +9,193 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        .download-page {
+        /* Mobile-First Responsive Design */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #111827, #1F2937);
+            color: #F9FAFB;
+            line-height: 1.6;
             min-height: 100vh;
-            background: var(--background-start, #111827);
-            color: var(--text-primary, #F9FAFB);
-            padding: 2rem 0;
         }
         
-        .download-container {
-            max-width: 700px;
+        /* Mobile-Optimized Navigation */
+        .mobile-nav {
+            position: sticky;
+            top: 0;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
         }
         
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #F9FAFB;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-brand i {
+            color: #6366f1;
+        }
+        
+        .nav-menu {
+            display: none; /* Hidden on mobile */
+        }
+        
+        .mobile-menu-btn {
+            display: block;
+            background: none;
+            border: none;
+            color: #F9FAFB;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        /* Mobile-First Container */
+        .download-container {
+            padding: 1rem;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* Mobile-Optimized Success Card */
         .success-card {
-            background: var(--card-background, #1F2937);
+            background: rgba(31, 41, 55, 0.8);
             border-radius: 16px;
-            padding: 3rem;
-            text-align: center;
-            border: 1px solid var(--border-color, #374151);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
         }
         
+        /* Mobile Success Icon */
         .success-icon {
-            font-size: 4rem;
+            text-align: center;
+            font-size: 3rem;
             color: #10B981;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             animation: pulse 2s infinite;
         }
         
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
         }
         
-        .purchase-info {
-            background: rgba(16, 185, 129, 0.1);
+        /* Mobile-Optimized Typography */
+        .success-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #F9FAFB;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        
+        .success-subtitle {
+            text-align: center;
+            color: #9CA3AF;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+        
+        /* Mobile-Friendly Purchase Details */
+        .purchase-details {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
             border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
         }
         
-        .info-row {
+        .details-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #10B981;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .detail-row {
             display: flex;
             justify-content: space-between;
-            margin: 1rem 0;
-            padding: 0.5rem 0;
+            align-items: flex-start;
+            padding: 0.75rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 1rem;
         }
         
-        .info-row:last-child {
+        .detail-row:last-child {
             border-bottom: none;
         }
         
+        .detail-label {
+            font-weight: 500;
+            color: #D1D5DB;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+            min-width: 80px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: #F9FAFB;
+            text-align: right;
+            word-break: break-all;
+            font-size: 0.95rem;
+        }
+        
+        /* Mobile-Optimized Download Button */
+        .download-section {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
         .download-btn {
+            width: 100%;
             background: linear-gradient(135deg, #10B981, #059669);
             color: white;
-            padding: 1.5rem 3rem;
+            padding: 1.25rem 2rem;
             border: none;
             border-radius: 12px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 1rem;
-            margin: 2rem 0;
-            text-decoration: none;
+            justify-content: center;
+            gap: 0.75rem;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            min-height: 56px; /* Touch-friendly minimum */
         }
         
         .download-btn:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
         }
         
@@ -90,130 +203,339 @@
             transform: translateY(0);
         }
         
-        .info-text {
-            color: #9CA3AF;
-            font-size: 0.9rem;
-            margin-top: 1rem;
+        .download-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
         
+        /* Mobile Security Info */
+        .security-info {
+            text-align: center;
+            color: #9CA3AF;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Mobile Trust Badges */
+        .trust-section {
+            margin-top: 2rem;
+        }
+        
+        .trust-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(31, 41, 55, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .trust-icon {
+            font-size: 1.5rem;
+            color: #10B981;
+            flex-shrink: 0;
+        }
+        
+        .trust-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #F9FAFB;
+            margin-bottom: 0.25rem;
+        }
+        
+        .trust-content p {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            line-height: 1.4;
+        }
+        
+        /* Loading Animation */
         .loading-text {
             display: none;
+            text-align: center;
+            color: #6366f1;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .fa-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Tablet Responsive (768px+) */
+        @media (min-width: 768px) {
+            .download-container {
+                padding: 2rem;
+                max-width: 600px;
+            }
+            
+            .success-card {
+                padding: 2rem;
+            }
+            
+            .success-title {
+                font-size: 2.2rem;
+            }
+            
+            .success-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .download-btn {
+                width: auto;
+                min-width: 300px;
+                padding: 1.5rem 3rem;
+                font-size: 1.2rem;
+            }
+            
+            .trust-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .nav-menu {
+                display: flex;
+                gap: 2rem;
+            }
+            
+            .nav-menu a {
+                color: #D1D5DB;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 0.95rem;
+                transition: color 0.3s ease;
+            }
+            
+            .nav-menu a:hover {
+                color: #F9FAFB;
+            }
+            
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+        
+        /* Desktop Responsive (1024px+) */
+        @media (min-width: 1024px) {
+            .download-container {
+                max-width: 800px;
+                padding: 3rem 2rem;
+            }
+            
+            .success-card {
+                padding: 3rem;
+            }
+            
+            .trust-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Extra Small Mobile (320px-480px) */
+        @media (max-width: 480px) {
+            .nav-brand {
+                font-size: 1.3rem;
+            }
+            
+            .success-title {
+                font-size: 1.6rem;
+            }
+            
+            .success-subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            
+            .detail-value {
+                text-align: left;
+            }
+            
+            .download-btn {
+                font-size: 1rem;
+                padding: 1.1rem 1.5rem;
+            }
+        }
+        
+        /* Dark Mode Enhancements */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #0F172A, #1E293B);
+            }
+        }
+        
+        /* High DPI Display Support */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .success-icon {
+                font-size: 3.2rem;
+            }
+        }
+        
+        /* Accessibility Improvements */
+        @media (prefers-reduced-motion: reduce) {
+            .success-icon,
+            .download-btn {
+                animation: none;
+                transition: none;
+            }
+        }
+        
+        /* Focus Styles for Accessibility */
+        .download-btn:focus,
+        .nav-brand:focus {
+            outline: 2px solid #6366f1;
+            outline-offset: 2px;
         }
     </style>
 </head>
-<body class="download-page">
-    <!-- Navigation -->
-    <nav class="navbar">
+<body>
+    <!-- Mobile-Optimized Navigation -->
+    <nav class="mobile-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
-                <i class="fas fa-code"></i> CodeStore
+                <i class="fas fa-code"></i>
+                <span>CodeStore</span>
             </a>
+            
+            <!-- Desktop Menu -->
             <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="#" class="nav-link">Categories</a>
-                <a href="#" class="nav-link">About</a>
-                <a href="#" class="nav-link">Contact</a>
+                <a href="index.html">Home</a>
+                <a href="#">Products</a>
+                <a href="#">Support</a>
             </div>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
     <!-- Main Content -->
     <div class="download-container">
         <div class="success-card">
+            <!-- Success Icon -->
             <div class="success-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
             
-            <h1 style="margin-bottom: 1rem; font-size: 2.5rem;">Payment Successful! 🎉</h1>
-            <p style="color: #9CA3AF; font-size: 1.1rem; margin-bottom: 2rem;">
+            <!-- Success Message -->
+            <h1 class="success-title">Payment Successful! 🎉</h1>
+            <p class="success-subtitle">
                 Thank you for your purchase! Your source code is ready for download.
             </p>
 
-            <!-- Purchase Info -->
-            <div class="purchase-info">
-                <h3 style="margin-bottom: 1.5rem; color: #10B981;">
-                    <i class="fas fa-receipt"></i> Purchase Details
-                </h3>
-                
-                <div class="info-row">
-                    <span><strong>Product:</strong></span>
-                    <span id="product-name">Premium Source Code</span>
+            <!-- Purchase Details -->
+            <div class="purchase-details">
+                <div class="details-header">
+                    <i class="fas fa-receipt"></i>
+                    <span>Purchase Details</span>
                 </div>
                 
-                <div class="info-row">
-                    <span><strong>Amount:</strong></span>
-                    <span id="amount-paid">₹70.00</span>
+                <div class="detail-row">
+                    <span class="detail-label">Product:</span>
+                    <span class="detail-value" id="product-name">Premium Source Code</span>
                 </div>
                 
-                <div class="info-row">
-                    <span><strong>Payment ID:</strong></span>
-                    <span id="payment-id">Loading...</span>
+                <div class="detail-row">
+                    <span class="detail-label">Amount:</span>
+                    <span class="detail-value" id="amount-paid">₹50.00</span>
                 </div>
                 
-                <div class="info-row">
-                    <span><strong>Date:</strong></span>
-                    <span id="payment-date">Just now</span>
+                <div class="detail-row">
+                    <span class="detail-label">Payment ID:</span>
+                    <span class="detail-value" id="payment-id">Loading...</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Date:</span>
+                    <span class="detail-value" id="payment-date">Just now</span>
                 </div>
             </div>
 
-            <!-- Download Button -->
-            <button id="download-btn" class="download-btn" onclick="startDownload()">
-                <i class="fas fa-download"></i>
-                <span>Download Your Files Now</span>
-            </button>
-            
-            <p class="info-text">
-                <i class="fas fa-shield-alt"></i> Secure download • Files are virus-free • 7-day access
-            </p>
-            
-            <!-- Loading Text (Hidden by default) -->
-            <p id="loading-text" class="loading-text" style="color: #6366f1; margin-top: 1rem;">
-                <i class="fas fa-spinner fa-spin"></i> Preparing your download...
-            </p>
+            <!-- Download Section -->
+            <div class="download-section">
+                <button id="download-btn" class="download-btn" onclick="initiateDownload()">
+                    <i class="fas fa-download"></i>
+                    <span>Download Your Files</span>
+                </button>
+                
+                <!-- Security Info -->
+                <div class="security-info">
+                    <i class="fas fa-shield-alt"></i>
+                    Secure download • Virus-free • 7-day access
+                </div>
+                
+                <!-- Loading Text -->
+                <div id="loading-text" class="loading-text">
+                    <i class="fas fa-spinner fa-spin"></i> Preparing your download...
+                </div>
+            </div>
         </div>
         
-        <!-- Trust Section -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 3rem;">
-            <div style="text-align: center; padding: 1.5rem; background: var(--card-background, #1F2937); border-radius: 12px; border: 1px solid var(--border-color, #374151);">
-                <i class="fas fa-code" style="font-size: 2rem; color: #10B981; margin-bottom: 1rem;"></i>
-                <h4 style="margin-bottom: 0.5rem;">Complete Source Code</h4>
-                <p style="color: #9CA3AF; font-size: 0.9rem;">Full project with documentation</p>
-            </div>
-            
-            <div style="text-align: center; padding: 1.5rem; background: var(--card-background, #1F2937); border-radius: 12px; border: 1px solid var(--border-color, #374151);">
-                <i class="fas fa-certificate" style="font-size: 2rem; color: #10B981; margin-bottom: 1rem;"></i>
-                <h4 style="margin-bottom: 0.5rem;">Commercial License</h4>
-                <p style="color: #9CA3AF; font-size: 0.9rem;">Use in your projects freely</p>
-            </div>
-            
-            <div style="text-align: center; padding: 1.5rem; background: var(--card-background, #1F2937); border-radius: 12px; border: 1px solid var(--border-color, #374151);">
-                <i class="fas fa-headset" style="font-size: 2rem; color: #10B981; margin-bottom: 1rem;"></i>
-                <h4 style="margin-bottom: 0.5rem;">24/7 Support</h4>
-                <p style="color: #9CA3AF; font-size: 0.9rem;">Help when you need it</p>
+        <!-- Trust Badges -->
+        <div class="trust-section">
+            <div class="trust-grid">
+                <div class="trust-badge">
+                    <div class="trust-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="trust-content">
+                        <h4>Complete Source</h4>
+                        <p>Full project with docs</p>
+                    </div>
+                </div>
+                
+                <div class="trust-badge">
+                    <div class="trust-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="trust-content">
+                        <h4>Commercial License</h4>
+                        <p>Use in your projects</p>
+                    </div>
+                </div>
+                
+                <div class="trust-badge">
+                    <div class="trust-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="trust-content">
+                        <h4>24/7 Support</h4>
+                        <p>Help when you need</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3><i class="fas fa-code"></i> CodeStore</h3>
-                <p>Thank you for choosing CodeStore!</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 CodeStore. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- SIMPLE WORKING JAVASCRIPT -->
+    <!-- JavaScript -->
     <script>
         // Global variables
         let downloadUrl = null;
         let productData = null;
 
-        // Simple URL parameter extraction
+        // Get URL parameters
         function getParams() {
             const params = new URLSearchParams(window.location.search);
             return {
@@ -224,184 +546,94 @@
 
         // Format currency
         function formatPrice(amount) {
-            return `₹${parseFloat(amount || 70).toFixed(2)}`;
+            return `₹${parseFloat(amount || 50).toFixed(2)}`;
         }
 
-        // Load payment and product data
+        // Load data
         function loadData() {
             try {
                 const { payment_id, product_id } = getParams();
                 
-                console.log('Loading data for:', { payment_id, product_id });
+                console.log('📱 Loading mobile-optimized data:', { payment_id, product_id });
 
-                // Get payment data from localStorage
+                // Get payment data
                 if (payment_id) {
                     const paymentKey = 'payment_' + payment_id;
                     const savedPayment = localStorage.getItem(paymentKey);
                     
                     if (savedPayment) {
                         const payment = JSON.parse(savedPayment);
-                        console.log('Payment found:', payment);
                         
-                        // Update UI with payment data
+                        // Update UI with mobile-optimized display
                         document.getElementById('payment-id').textContent = payment_id;
                         document.getElementById('product-name').textContent = payment.product_title || 'Premium Source Code';
                         document.getElementById('amount-paid').textContent = formatPrice(payment.amount);
-                        document.getElementById('payment-date').textContent = new Date().toLocaleDateString();
+                        document.getElementById('payment-date').textContent = new Date().toLocaleDateString('en-IN', {
+                            day: '2-digit',
+                            month: '2-digit', 
+                            year: 'numeric'
+                        });
                     }
                 }
 
-                // Try to load product data with Firebase
+                // Load product data
                 loadProductData(product_id);
 
             } catch (error) {
                 console.error('Error loading data:', error);
-                // Continue with default values - don't block the page
             }
         }
 
-        // Load product data from Firebase
+        // Load product data
         async function loadProductData(productId) {
             try {
-                // Dynamic import with error handling
                 const { productService } = await import('./js/firebase-config.js');
                 const result = await productService.getProduct(productId);
                 
                 if (result.success && result.product) {
                     productData = result.product;
-                    console.log('Product loaded:', productData);
-                    
-                    // Update download URL
                     downloadUrl = productData.downloadUrl || 
                                  productData.downloadLink || 
                                  productData.download_url ||
                                  productData.fileUrl;
                     
-                    // Update product name if available
+                    // Update product name
                     if (productData.title || productData.name) {
                         document.getElementById('product-name').textContent = productData.title || productData.name;
                     }
-                    
-                    console.log('Download URL set:', downloadUrl);
                 }
             } catch (error) {
-                console.warn('Firebase load failed, using default values:', error);
-                // Set a default download URL for testing
+                console.warn('Firebase load failed:', error);
+                // Set default for testing
                 downloadUrl = "https://drive.google.com/file/d/default/view";
             }
         }
 
-        // MAIN DOWNLOAD FUNCTION - SIMPLE & WORKING
-        function startDownload() {
+        // Mobile-optimized download function
+        function initiateDownload() {
             const downloadBtn = document.getElementById('download-btn');
             const loadingText = document.getElementById('loading-text');
             
             try {
-                // Show loading state
+                // Mobile-friendly loading state
                 downloadBtn.style.opacity = '0.7';
                 downloadBtn.style.pointerEvents = 'none';
                 loadingText.style.display = 'block';
                 
-                console.log('Starting download with URL:', downloadUrl);
+                // Haptic feedback for mobile (if supported)
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+                
+                console.log('📱 Mobile download initiated:', downloadUrl);
 
-                // If no specific download URL, try to get from admin panel data
+                // Get download URL
                 if (!downloadUrl && productData) {
                     downloadUrl = productData.downloadUrl || 
                                  productData.downloadLink || 
                                  productData.download_url;
                 }
 
-                // Default download URL if still not available
                 if (!downloadUrl) {
-                    // Get from admin panel or use default
                     downloadUrl = prompt('Enter download URL:', 'https://drive.google.com/file/d/your-file-id/view');
-                }
-
-                if (downloadUrl && downloadUrl !== 'null') {
-                    // Handle different URL types
-                    if (downloadUrl.includes('drive.google.com')) {
-                        // Google Drive - convert to direct download
-                        const fileId = downloadUrl.match(/\/d\/([a-zA-Z0-9-_]+)/)?.[1];
-                        if (fileId) {
-                            const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-                            window.open(directUrl, '_blank');
-                        } else {
-                            window.open(downloadUrl, '_blank');
-                        }
-                    } else if (downloadUrl.includes('dropbox.com')) {
-                        // Dropbox - ensure direct download
-                        const dropboxUrl = downloadUrl.replace('?dl=0', '?dl=1');
-                        window.open(dropboxUrl, '_blank');
-                    } else {
-                        // Direct URL or other services
-                        window.open(downloadUrl, '_blank');
-                    }
-
-                    // Success feedback
-                    setTimeout(() => {
-                        downloadBtn.innerHTML = '<i class="fas fa-check"></i> <span>Download Started!</span>';
-                        downloadBtn.style.background = 'linear-gradient(135deg, #059669, #047857)';
-                        loadingText.innerHTML = '<i class="fas fa-check-circle"></i> Download initiated successfully!';
-                        loadingText.style.color = '#10B981';
-                        
-                        // Reset after 5 seconds
-                        setTimeout(() => {
-                            downloadBtn.innerHTML = '<i class="fas fa-download"></i> <span>Download Again</span>';
-                            downloadBtn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
-                            downloadBtn.style.opacity = '1';
-                            downloadBtn.style.pointerEvents = 'auto';
-                            loadingText.style.display = 'none';
-                        }, 5000);
-                    }, 2000);
-
-                    console.log('✅ Download started successfully');
-
-                } else {
-                    throw new Error('Download URL not available');
-                }
-
-            } catch (error) {
-                console.error('Download error:', error);
-                
-                // Error handling
-                downloadBtn.style.opacity = '1';
-                downloadBtn.style.pointerEvents = 'auto';
-                loadingText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Download failed. Please contact support.';
-                loadingText.style.color = '#EF4444';
-                loadingText.style.display = 'block';
-                
-                alert('❌ Download failed. Please contact support with your Payment ID.');
-            }
-        }
-
-        // Initialize page
-        function initializePage() {
-            console.log('🚀 Download page initialized');
-            console.log('URL:', window.location.href);
-            
-            // Update page title
-            document.title = 'Download Your Purchase - CodeStore';
-            
-            // Load data
-            loadData();
-            
-            console.log('✅ Page ready for download');
-        }
-
-        // Start when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Small delay to ensure everything loads
-            setTimeout(initializePage, 100);
-        });
-
-        // Make function globally available
-        window.startDownload = startDownload;
-
-        // Simple error handler
-        window.addEventListener('error', function(e) {
-            console.warn('Page error (non-critical):', e.message);
-        });
-
-    </script>
-</body>
-</html>
+     
