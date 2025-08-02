@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Mobile-First Responsive Design */
+        /* Mobile-First CSS */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +24,6 @@
             min-height: 100vh;
         }
         
-        /* Mobile-Optimized Navigation */
         .mobile-nav {
             position: sticky;
             top: 0;
@@ -57,42 +56,24 @@
             color: #6366f1;
         }
         
-        .nav-menu {
-            display: none; /* Hidden on mobile */
-        }
-        
-        .mobile-menu-btn {
-            display: block;
-            background: none;
-            border: none;
-            color: #F9FAFB;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-        
-        /* Mobile-First Container */
         .download-container {
             padding: 1rem;
             max-width: 100%;
             margin: 0 auto;
         }
         
-        /* Mobile-Optimized Success Card */
         .success-card {
-            background: rgba(31, 41, 55, 0.8);
+            background: rgba(31, 41, 55, 0.9);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 2rem 1.5rem;
             margin: 1rem 0;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
+            text-align: center;
         }
         
-        /* Mobile Success Icon */
         .success-icon {
-            text-align: center;
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: #10B981;
             margin-bottom: 1.5rem;
             animation: pulse 2s infinite;
@@ -103,9 +84,7 @@
             50% { opacity: 0.8; transform: scale(1.05); }
         }
         
-        /* Mobile-Optimized Typography */
         .success-title {
-            text-align: center;
             font-size: 1.8rem;
             font-weight: 700;
             color: #F9FAFB;
@@ -114,20 +93,19 @@
         }
         
         .success-subtitle {
-            text-align: center;
             color: #9CA3AF;
             font-size: 1rem;
             margin-bottom: 2rem;
             line-height: 1.5;
         }
         
-        /* Mobile-Friendly Purchase Details */
         .purchase-details {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.08));
             border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 12px;
             padding: 1.5rem;
             margin: 1.5rem 0;
+            text-align: left;
         }
         
         .details-header {
@@ -138,12 +116,13 @@
             color: #10B981;
             font-weight: 600;
             font-size: 1.1rem;
+            justify-content: center;
         }
         
         .detail-row {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             padding: 0.75rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             gap: 1rem;
@@ -157,19 +136,15 @@
             font-weight: 500;
             color: #D1D5DB;
             font-size: 0.95rem;
-            flex-shrink: 0;
-            min-width: 80px;
         }
         
         .detail-value {
             font-weight: 600;
             color: #F9FAFB;
-            text-align: right;
-            word-break: break-all;
             font-size: 0.95rem;
+            word-break: break-all;
         }
         
-        /* Mobile-Optimized Download Button */
         .download-section {
             text-align: center;
             margin: 2rem 0;
@@ -191,7 +166,8 @@
             justify-content: center;
             gap: 0.75rem;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            min-height: 56px; /* Touch-friendly minimum */
+            min-height: 56px;
+            text-decoration: none;
         }
         
         .download-btn:hover {
@@ -209,7 +185,6 @@
             transform: none;
         }
         
-        /* Mobile Security Info */
         .security-info {
             text-align: center;
             color: #9CA3AF;
@@ -221,7 +196,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
-        /* Mobile Trust Badges */
         .trust-section {
             margin-top: 2rem;
         }
@@ -261,25 +235,19 @@
             line-height: 1.4;
         }
         
-        /* Loading Animation */
-        .loading-text {
+        .debug-section {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.8rem;
+            text-align: left;
             display: none;
-            text-align: center;
-            color: #6366f1;
-            margin-top: 1rem;
-            font-size: 0.9rem;
         }
         
-        .fa-spin {
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Tablet Responsive (768px+) */
+        /* Tablet and Desktop */
         @media (min-width: 768px) {
             .download-container {
                 padding: 2rem;
@@ -287,15 +255,11 @@
             }
             
             .success-card {
-                padding: 2rem;
+                padding: 3rem 2rem;
             }
             
             .success-title {
                 font-size: 2.2rem;
-            }
-            
-            .success-subtitle {
-                font-size: 1.1rem;
             }
             
             .download-btn {
@@ -306,61 +270,11 @@
             }
             
             .trust-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .nav-menu {
-                display: flex;
-                gap: 2rem;
-            }
-            
-            .nav-menu a {
-                color: #D1D5DB;
-                text-decoration: none;
-                font-weight: 500;
-                font-size: 0.95rem;
-                transition: color 0.3s ease;
-            }
-            
-            .nav-menu a:hover {
-                color: #F9FAFB;
-            }
-            
-            .mobile-menu-btn {
-                display: none;
-            }
-        }
-        
-        /* Desktop Responsive (1024px+) */
-        @media (min-width: 1024px) {
-            .download-container {
-                max-width: 800px;
-                padding: 3rem 2rem;
-            }
-            
-            .success-card {
-                padding: 3rem;
-            }
-            
-            .trust-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
         
-        /* Extra Small Mobile (320px-480px) */
         @media (max-width: 480px) {
-            .nav-brand {
-                font-size: 1.3rem;
-            }
-            
-            .success-title {
-                font-size: 1.6rem;
-            }
-            
-            .success-subtitle {
-                font-size: 0.95rem;
-            }
-            
             .detail-row {
                 flex-direction: column;
                 gap: 0.5rem;
@@ -370,64 +284,17 @@
             .detail-value {
                 text-align: left;
             }
-            
-            .download-btn {
-                font-size: 1rem;
-                padding: 1.1rem 1.5rem;
-            }
-        }
-        
-        /* Dark Mode Enhancements */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #0F172A, #1E293B);
-            }
-        }
-        
-        /* High DPI Display Support */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .success-icon {
-                font-size: 3.2rem;
-            }
-        }
-        
-        /* Accessibility Improvements */
-        @media (prefers-reduced-motion: reduce) {
-            .success-icon,
-            .download-btn {
-                animation: none;
-                transition: none;
-            }
-        }
-        
-        /* Focus Styles for Accessibility */
-        .download-btn:focus,
-        .nav-brand:focus {
-            outline: 2px solid #6366f1;
-            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
-    <!-- Mobile-Optimized Navigation -->
+    <!-- Navigation -->
     <nav class="mobile-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
                 <i class="fas fa-code"></i>
                 <span>CodeStore</span>
             </a>
-            
-            <!-- Desktop Menu -->
-            <div class="nav-menu">
-                <a href="index.html">Home</a>
-                <a href="#">Products</a>
-                <a href="#">Support</a>
-            </div>
-            
-            <!-- Mobile Menu Button -->
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
     </nav>
 
@@ -454,12 +321,12 @@
                 
                 <div class="detail-row">
                     <span class="detail-label">Product:</span>
-                    <span class="detail-value" id="product-name">Premium Source Code</span>
+                    <span class="detail-value" id="product-name">Loading...</span>
                 </div>
                 
                 <div class="detail-row">
                     <span class="detail-label">Amount:</span>
-                    <span class="detail-value" id="amount-paid">₹50.00</span>
+                    <span class="detail-value" id="amount-paid">Loading...</span>
                 </div>
                 
                 <div class="detail-row">
@@ -469,13 +336,13 @@
                 
                 <div class="detail-row">
                     <span class="detail-label">Date:</span>
-                    <span class="detail-value" id="payment-date">Just now</span>
+                    <span class="detail-value" id="payment-date">Loading...</span>
                 </div>
             </div>
 
             <!-- Download Section -->
             <div class="download-section">
-                <button id="download-btn" class="download-btn" onclick="initiateDownload()">
+                <button id="download-btn" class="download-btn" onclick="startDownload()">
                     <i class="fas fa-download"></i>
                     <span>Download Your Files</span>
                 </button>
@@ -485,12 +352,16 @@
                     <i class="fas fa-shield-alt"></i>
                     Secure download • Virus-free • 7-day access
                 </div>
-                
-                <!-- Loading Text -->
-                <div id="loading-text" class="loading-text">
-                    <i class="fas fa-spinner fa-spin"></i> Preparing your download...
-                </div>
             </div>
+
+            <!-- Debug Section -->
+            <div id="debug-section" class="debug-section">
+                <h4>Debug Information:</h4>
+                <div id="debug-content"></div>
+                <button onclick="toggleDebug()" style="margin-top: 0.5rem; padding: 0.25rem 0.5rem; background: #374151; color: white; border: none; border-radius: 4px; font-size: 0.7rem;">Hide Debug</button>
+            </div>
+            
+            <button onclick="toggleDebug()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #374151; color: white; border: none; border-radius: 4px; font-size: 0.8rem;">Show Debug Info</button>
         </div>
         
         <!-- Trust Badges -->
@@ -529,111 +400,198 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- COMPLETE WORKING JAVASCRIPT -->
     <script>
         // Global variables
+        let debugLogs = [];
         let downloadUrl = null;
+        let paymentData = null;
         let productData = null;
 
+        // Debug logging
+        function logDebug(message, data = null) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            debugLogs.push(logEntry);
+            
+            if (data) {
+                debugLogs.push(`  → ${JSON.stringify(data, null, 2)}`);
+            }
+            
+            console.log(logEntry, data || '');
+            updateDebugDisplay();
+        }
+
+        // Update debug display
+        function updateDebugDisplay() {
+            const debugContent = document.getElementById('debug-content');
+            if (debugContent) {
+                debugContent.innerHTML = debugLogs.join('\n');
+            }
+        }
+
+        // Toggle debug section
+        function toggleDebug() {
+            const debugSection = document.getElementById('debug-section');
+            debugSection.style.display = debugSection.style.display === 'none' ? 'block' : 'none';
+        }
+
         // Get URL parameters
-        function getParams() {
+        function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
-            return {
+            const result = {
                 payment_id: params.get('payment_id'),
                 product_id: params.get('product_id')
             };
+            
+            logDebug('URL Parameters:', result);
+            return result;
         }
 
         // Format currency
-        function formatPrice(amount) {
-            return `₹${parseFloat(amount || 50).toFixed(2)}`;
+        function formatCurrency(amount) {
+            const formattedAmount = `₹${parseFloat(amount || 0).toFixed(2)}`;
+            logDebug('Currency formatted:', { input: amount, output: formattedAmount });
+            return formattedAmount;
         }
 
-        // Load data
-        function loadData() {
+        // Load payment data from localStorage
+        function loadPaymentData(paymentId) {
             try {
-                const { payment_id, product_id } = getParams();
+                logDebug('Loading payment data from localStorage:', paymentId);
                 
-                console.log('📱 Loading mobile-optimized data:', { payment_id, product_id });
-
-                // Get payment data
-                if (payment_id) {
-                    const paymentKey = 'payment_' + payment_id;
-                    const savedPayment = localStorage.getItem(paymentKey);
-                    
-                    if (savedPayment) {
-                        const payment = JSON.parse(savedPayment);
-                        
-                        // Update UI with mobile-optimized display
-                        document.getElementById('payment-id').textContent = payment_id;
-                        document.getElementById('product-name').textContent = payment.product_title || 'Premium Source Code';
-                        document.getElementById('amount-paid').textContent = formatPrice(payment.amount);
-                        document.getElementById('payment-date').textContent = new Date().toLocaleDateString('en-IN', {
-                            day: '2-digit',
-                            month: '2-digit', 
-                            year: 'numeric'
-                        });
-                    }
+                const storageKey = 'payment_' + paymentId;
+                const storedData = localStorage.getItem(storageKey);
+                
+                logDebug('Raw localStorage data:', storedData);
+                
+                if (!storedData) {
+                    logDebug('No payment data found in localStorage');
+                    return null;
                 }
 
-                // Load product data
-                loadProductData(product_id);
-
+                const parsed = JSON.parse(storedData);
+                logDebug('Parsed payment data:', parsed);
+                return parsed;
+                
             } catch (error) {
-                console.error('Error loading data:', error);
+                logDebug('Error loading payment data:', error.message);
+                return null;
             }
         }
 
-        // Load product data
+        // Load product data with fallback
         async function loadProductData(productId) {
             try {
+                logDebug('Loading product data:', productId);
+                
+                // Try Firebase import
                 const { productService } = await import('./js/firebase-config.js');
+                logDebug('Firebase config imported successfully');
+                
                 const result = await productService.getProduct(productId);
+                logDebug('Firebase product result:', result);
                 
                 if (result.success && result.product) {
-                    productData = result.product;
-                    downloadUrl = productData.downloadUrl || 
-                                 productData.downloadLink || 
-                                 productData.download_url ||
-                                 productData.fileUrl;
-                    
-                    // Update product name
-                    if (productData.title || productData.name) {
-                        document.getElementById('product-name').textContent = productData.title || productData.name;
-                    }
+                    return result.product;
+                } else {
+                    throw new Error('Product not found in Firebase');
                 }
+                
             } catch (error) {
-                console.warn('Firebase load failed:', error);
-                // Set default for testing
-                downloadUrl = "https://drive.google.com/file/d/default/view";
+                logDebug('Firebase failed, using fallback:', error.message);
+                
+                // Fallback: return basic product data
+                return {
+                    id: productId,
+                    title: 'Premium Source Code',
+                    name: 'Premium Source Code',
+                    downloadUrl: 'https://drive.google.com/file/d/default/view',
+                    price: 70
+                };
             }
         }
 
-        // Mobile-optimized download function
-        function initiateDownload() {
+        // Update UI with data
+        function updateUI() {
+            try {
+                logDebug('Updating UI with data');
+                
+                // Update product name
+                const productName = (productData && (productData.title || productData.name)) || 
+                                   (paymentData && paymentData.product_title) || 
+                                   'Premium Source Code';
+                document.getElementById('product-name').textContent = productName;
+                
+                // Update amount
+                const amount = (paymentData && paymentData.amount) || 
+                              (productData && productData.price) || 
+                              70;
+                document.getElementById('amount-paid').textContent = formatCurrency(amount);
+                
+                // Update payment ID
+                const { payment_id } = getUrlParams();
+                document.getElementById('payment-id').textContent = payment_id || 'Not available';
+                
+                // Update date
+                const date = paymentData ? new Date(paymentData.timestamp) : new Date();
+                document.getElementById('payment-date').textContent = date.toLocaleDateString('en-IN', {
+                    day: '2-digit',
+                    month: '2-digit', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                // Get download URL
+                downloadUrl = (productData && (
+                    productData.downloadUrl || 
+                    productData.downloadLink || 
+                    productData.download_url ||
+                    productData.fileUrl
+                )) || 'https://drive.google.com/file/d/default/view';
+                
+                logDebug('UI updated successfully', {
+                    productName,
+                    amount,
+                    payment_id,
+                    downloadUrl
+                });
+                
+            } catch (error) {
+                logDebug('Error updating UI:', error.message);
+            }
+        }
+
+        // MAIN DOWNLOAD FUNCTION - SIMPLIFIED & WORKING
+        function startDownload() {
+            logDebug('Download initiated by user');
+            
             const downloadBtn = document.getElementById('download-btn');
-            const loadingText = document.getElementById('loading-text');
             
             try {
-                // Mobile-friendly loading state
+                // Update button state
                 downloadBtn.style.opacity = '0.7';
                 downloadBtn.style.pointerEvents = 'none';
-                loadingText.style.display = 'block';
+                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Starting Download...</span>';
                 
-                // Haptic feedback for mobile (if supported)
+                // Haptic feedback for mobile
                 if (navigator.vibrate) {
                     navigator.vibrate(50);
                 }
                 
-                console.log('📱 Mobile download initiated:', downloadUrl);
+                logDebug('Attempting download with URL:', downloadUrl);
 
-                // Get download URL
-                if (!downloadUrl && productData) {
-                    downloadUrl = productData.downloadUrl || 
-                                 productData.downloadLink || 
-                                 productData.download_url;
+                // Get download URL (with fallback)
+                let finalDownloadUrl = downloadUrl;
+                
+                if (!finalDownloadUrl || finalDownloadUrl === 'null') {
+                    // Prompt user for URL as last resort
+                    finalDownloadUrl = prompt('Admin panel download URL not found. Enter download URL manually:', 'https://drive.google.com/file/d/your-file-id/view');
                 }
 
-                if (!downloadUrl) {
-                    downloadUrl = prompt('Enter download URL:', 'https://drive.google.com/file/d/your-file-id/view');
-     
+                if (finalDownloadUrl && finalDownloadUrl !== 'null' && finalDownloadUrl.trim() !== '') {
+                    logDebug('Final download URL:', finalDownloadUrl);
+                    
+                    // Handle different URL types
+        
