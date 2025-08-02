@@ -13,7 +13,7 @@
     
     <style>
         /* Professional Payment Modal */
-        .payment-modal {
+        .payment-success-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -27,39 +27,40 @@
             backdrop-filter: blur(8px);
         }
         
-        .modal-content {
+        .success-content {
             background: var(--card-background);
             padding: 2.5rem;
             border-radius: 16px;
             text-align: center;
-            max-width: 420px;
+            max-width: 400px;
             width: 90%;
             border: 1px solid var(--border-color);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
         }
         
         .success-icon {
             font-size: 4rem;
             color: #10B981;
             margin-bottom: 1.5rem;
-            animation: successBounce 0.6s ease;
+            animation: successPulse 0.8s ease;
         }
         
-        @keyframes successBounce {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+        @keyframes successPulse {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
         }
         
-        .modal-content h2 {
+        .success-content h2 {
             color: var(--text-primary);
             margin-bottom: 1rem;
             font-size: 1.5rem;
         }
         
-        .modal-content p {
+        .success-content p {
             color: var(--text-secondary);
             margin-bottom: 1rem;
+            font-size: 0.9rem;
         }
         
         .progress-bar {
@@ -75,10 +76,10 @@
             height: 100%;
             background: linear-gradient(90deg, #10B981, #059669);
             width: 0%;
-            animation: fillProgress 3s ease forwards;
+            animation: progressAnimation 3s ease forwards;
         }
         
-        @keyframes fillProgress {
+        @keyframes progressAnimation {
             to { width: 100%; }
         }
         
@@ -95,11 +96,11 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 1.5s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: buttonShimmer 1.5s infinite;
         }
         
-        @keyframes shimmer {
+        @keyframes buttonShimmer {
             to { left: 100%; }
         }
     </style>
@@ -121,13 +122,13 @@
     </nav>
 
     <!-- Payment Success Modal -->
-    <div id="success-modal" class="payment-modal" style="display: none;">
-        <div class="modal-content">
+    <div id="payment-success-modal" class="payment-success-modal" style="display: none;">
+        <div class="success-content">
             <div class="success-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
             <h2>Payment Successful! 🎉</h2>
-            <p id="success-message">Your payment has been processed successfully</p>
+            <p id="payment-details">Your payment has been processed successfully</p>
             <div class="progress-bar">
                 <div class="progress-fill"></div>
             </div>
@@ -146,12 +147,9 @@
         <!-- Not Found State -->
         <div id="not-found" class="not-found-container" style="display: none;">
             <div class="not-found-content">
-                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
                 <h2>Product Not Found</h2>
                 <p>The product you're looking for doesn't exist or has been removed.</p>
-                <a href="index.html" class="btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to Home
-                </a>
+                <a href="index.html" class="btn-secondary">Back to Home</a>
             </div>
         </div>
 
@@ -165,19 +163,16 @@
 
                 <!-- Product Details -->
                 <div class="product-details-section">
-                    <h1 id="product-title" class="product-title">Loading...</h1>
-                    <div style="margin-bottom: 2rem;">
-                        <span id="product-price" class="product-price"></span>
-                        <span style="color: var(--text-secondary); font-size: 0.9rem; margin-left: 0.5rem;">One-time payment • Lifetime access</span>
-                    </div>
+                    <h1 id="product-title" class="product-title"></h1>
+                    <p id="product-price" class="product-price"></p>
                     
                     <div class="product-description">
-                        <h3><i class="fas fa-info-circle"></i> Description</h3>
-                        <p id="product-description">Loading description...</p>
+                        <h3>Description</h3>
+                        <p id="product-description"></p>
                     </div>
 
                     <div class="product-features">
-                        <h3><i class="fas fa-gift"></i> What You Get</h3>
+                        <h3>What You Get</h3>
                         <ul>
                             <li><i class="fas fa-code"></i> Complete source code</li>
                             <li><i class="fas fa-file-alt"></i> Documentation and setup guide</li>
@@ -186,28 +181,12 @@
                         </ul>
                     </div>
 
-                    <!-- Payment Methods Info -->
-                    <div style="display: flex; justify-content: center; gap: 1rem; margin: 1.5rem 0; flex-wrap: wrap;">
-                        <div style="display: flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.8rem; background: rgba(109, 40, 217, 0.1); border-radius: 20px; font-size: 0.75rem; color: var(--primary-light);">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Cards</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.8rem; background: rgba(109, 40, 217, 0.1); border-radius: 20px; font-size: 0.75rem; color: var(--primary-light);">
-                            <i class="fas fa-mobile-alt"></i>
-                            <span>UPI</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.8rem; background: rgba(109, 40, 217, 0.1); border-radius: 20px; font-size: 0.75rem; color: var(--primary-light);">
-                            <i class="fas fa-university"></i>
-                            <span>NetBanking</span>
-                        </div>
-                    </div>
-
                     <div class="purchase-section">
                         <button id="buy-now-btn" class="btn-primary btn-large">
-                            <i class="fas fa-lock"></i> <span>Secure Payment with Razorpay</span>
+                            <i class="fas fa-shopping-cart"></i> Buy Now
                         </button>
                         <p style="text-align: center; font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                            <i class="fas fa-shield-alt"></i> 256-bit SSL Encrypted • PCI DSS Compliant
+                            <i class="fas fa-shield-alt"></i> Secure payment powered by Razorpay
                         </p>
                     </div>
                 </div>
@@ -219,21 +198,21 @@
                     <i class="fas fa-shield-alt"></i>
                     <div>
                         <h4>Secure Payment</h4>
-                        <p>Powered by Razorpay, India's most trusted payment gateway with bank-level security.</p>
+                        <p>Powered by Razorpay, India's most trusted payment gateway.</p>
                     </div>
                 </div>
                 <div class="badge">
                     <i class="fas fa-bolt"></i>
                     <div>
                         <h4>Instant Download</h4>
-                        <p>Get immediate access to your purchase after successful payment verification.</p>
+                        <p>Get immediate access to your purchase after payment.</p>
                     </div>
                 </div>
                 <div class="badge">
                     <i class="fas fa-briefcase"></i>
                     <div>
                         <h4>Commercial License</h4>
-                        <p>Use the code in your commercial projects without any restrictions.</p>
+                        <p>Use the code in your commercial projects without restrictions.</p>
                     </div>
                 </div>
             </div>
@@ -261,38 +240,34 @@
         </div>
     </footer>
 
-    <!-- PROFESSIONAL WORKING JAVASCRIPT -->
+    <!-- ORIGINAL LOADING LOGIC + PROFESSIONAL RAZORPAY -->
     <script type="module">
         import { productService, utils } from './js/firebase-config.js';
 
-        // Configuration
-        const RAZORPAY_KEY = 'rzp_test_lkoFfNbWaRVyLf'; // Your key
-        const COMPANY_NAME = 'CodeStore';
+        // DOM Elements - SAME AS ORIGINAL
+        const loadingDiv = document.getElementById('loading');
+        const notFoundDiv = document.getElementById('not-found');
+        const productContainer = document.getElementById('product-container');
+        const productImage = document.getElementById('product-image');
+        const productTitle = document.getElementById('product-title');
+        const productPrice = document.getElementById('product-price');
+        const productDescription = document.getElementById('product-description');
+        const buyNowBtn = document.getElementById('buy-now-btn');
+        const paymentSuccessModal = document.getElementById('payment-success-modal');
+        const paymentDetails = document.getElementById('payment-details');
 
-        // DOM Elements
-        const loading = document.getElementById('loading');
-        const notFound = document.getElementById('not-found');
-        const container = document.getElementById('product-container');
-        const image = document.getElementById('product-image');
-        const title = document.getElementById('product-title');
-        const price = document.getElementById('product-price');
-        const description = document.getElementById('product-description');
-        const buyBtn = document.getElementById('buy-now-btn');
-        const successModal = document.getElementById('success-modal');
-        const successMessage = document.getElementById('success-message');
-
-        // Current product
+        // Current product storage - SAME AS ORIGINAL
         let currentProduct = null;
 
-        // Get product ID from URL
-        function getProductId() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('id');
+        // Get product ID from URL - SAME AS ORIGINAL
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
         }
 
-        // Load product
-        async function loadProduct() {
-            const productId = getProductId();
+        // Load product details - SAME AS ORIGINAL
+        async function loadProductDetails() {
+            const productId = getProductIdFromUrl();
             
             if (!productId) {
                 showNotFound();
@@ -301,14 +276,12 @@
 
             try {
                 showLoading();
-                
                 const result = await productService.getProduct(productId);
                 
                 if (result.success && result.product) {
                     currentProduct = result.product;
                     displayProduct(result.product);
                 } else {
-                    console.error('Product load failed:', result.error);
                     showNotFound();
                 }
             } catch (error) {
@@ -317,113 +290,141 @@
             }
         }
 
-        // Display product
+        // Display product details - SAME AS ORIGINAL
         function displayProduct(product) {
             hideLoading();
             
             // Update page title
-            const productName = product.title || product.name || 'Premium Source Code';
-            document.title = `${productName} - CodeStore`;
-
-            // Display image with proper error handling
-            const imageUrl = product.imageUrl || product.image;
-            if (imageUrl) {
-                image.src = imageUrl;
-                image.alt = productName;
-                image.style.display = 'block';
+            document.title = `${product.title || product.name} - CodeStore`;
+            
+            // Display product image - MAIN FIX FOR IMAGE ISSUE
+            if (product.imageUrl || product.image) {
+                productImage.src = product.imageUrl || product.image;
+                productImage.alt = product.title || product.name;
+                productImage.style.display = 'block';
                 
-                image.onerror = function() {
-                    this.src = 'https://via.placeholder.com/500x400/6366f1/white?text=Premium+Source+Code';
-                    this.alt = 'Product Image';
+                productImage.onerror = function() {
+                    this.src = 'https://via.placeholder.com/500x400/6366f1/white?text=Image+Not+Available';
                 };
             } else {
-                image.src = 'https://via.placeholder.com/500x400/6366f1/white?text=Premium+Source+Code';
-                image.alt = 'Product Preview';
+                productImage.src = 'https://via.placeholder.com/500x400/6366f1/white?text=No+Image';
             }
-
-            // Display details
-            title.textContent = productName;
-            price.textContent = utils.formatCurrency(product.price || 99);
-            description.textContent = product.description || 'Premium source code solution with complete documentation and commercial license.';
-
-            // Setup buy button
-            buyBtn.onclick = () => initiatePayment(product);
             
-            container.style.display = 'block';
-            console.log('✅ Product displayed successfully');
+            // Display other details
+            productTitle.textContent = product.title || product.name || 'Untitled Product';
+            productPrice.textContent = utils.formatCurrency(product.price || 0);
+            productDescription.textContent = product.description || 'No description available.';
+            
+            // Setup buy button - ENHANCED IMPLEMENTATION
+            if (buyNowBtn) {
+                buyNowBtn.onclick = () => initiateSecurePayment(product);
+            }
+            
+            productContainer.style.display = 'block';
+            console.log('Product displayed:', product);
         }
 
-        // Professional Razorpay Payment Integration
-        function initiatePayment(product) {
+        // PROFESSIONAL RAZORPAY IMPLEMENTATION - MAIN UPGRADE
+        function initiateSecurePayment(product) {
             if (!window.Razorpay) {
                 alert('Payment gateway not available. Please refresh the page and try again.');
                 return;
             }
 
-            // Show processing state
-            buyBtn.classList.add('btn-processing');
-            buyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Initializing Payment...</span>';
+            // Professional button state management
+            buyNowBtn.classList.add('btn-processing');
+            buyNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
 
             const productName = product.title || product.name || 'Premium Source Code';
-            const amount = Math.round((product.price || 99) * 100); // Convert to paise
+            const productAmount = product.price || 70;
 
+            // Professional Razorpay Options
             const options = {
-                key: RAZORPAY_KEY,
-                amount: amount,
+                key: 'rzp_test_lkoFfNbWaRVyLf', // Your actual test key
+                amount: Math.round(productAmount * 100), // Amount in paise
                 currency: 'INR',
-                name: COMPANY_NAME,
+                name: 'CodeStore',
                 description: `Purchase: ${productName}`,
                 image: 'https://cdn-icons-png.flaticon.com/512/1006/1006555.png',
                 
-                // Success Handler - PROFESSIONAL STYLE
+                // PROFESSIONAL SUCCESS HANDLER
                 handler: function(response) {
-                    console.log('✅ Payment successful:', response.razorpay_payment_id);
+                    console.log('✅ Payment Success:', response.razorpay_payment_id);
                     handlePaymentSuccess(response, product);
                 },
                 
-                // Customer Details
+                // Enhanced customer prefill
                 prefill: {
                     name: 'Valued Customer',
-                    email: 'customer@example.com',
+                    email: 'customer@codestore.com',
                     contact: '9999999999'
                 },
                 
-                // Transaction Notes
+                // Transaction metadata
                 notes: {
                     product_id: product.id,
                     product_name: productName,
+                    amount: productAmount,
                     website: 'CodeStore'
                 },
                 
-                // Theme
+                // Professional theme
                 theme: {
-                    color: '#6D28D9'
+                    color: '#6D28D9',
+                    backdrop_color: 'rgba(0,0,0,0.8)'
                 },
                 
-                // Modal Settings - PROFESSIONAL
+                // Enhanced modal configuration
                 modal: {
                     ondismiss: function() {
-                        console.log('Payment cancelled by user');
+                        console.log('Payment modal dismissed');
                         resetBuyButton();
                     },
-                    confirm_close: true
+                    confirm_close: true,
+                    animation: true
                 },
                 
-                // Timeout and Retry Settings
-                timeout: 600, // 10 minutes
-                remember_customer: false
+                // Timeout and retry settings
+                timeout: 900, // 15 minutes
+                remember_customer: false,
+                
+                // Enhanced configuration for UPI
+                config: {
+                    display: {
+                        blocks: {
+                            banks: {
+                                name: 'Pay via Bank Account',
+                                instruments: [
+                                    { method: 'netbanking' },
+                                    { method: 'upi' }
+                                ]
+                            },
+                            other: {
+                                name: 'Other Payment Methods', 
+                                instruments: [
+                                    { method: 'card' },
+                                    { method: 'wallet' }
+                                ]
+                            }
+                        },
+                        sequence: ['block.banks', 'block.other'],
+                        preferences: {
+                            show_default_blocks: true
+                        }
+                    }
+                }
             };
 
             try {
-                // Reset button first
+                // Reset button state
                 resetBuyButton();
                 
                 // Create Razorpay instance
                 const razorpay = new Razorpay(options);
                 
-                // Payment Failed Handler - PROFESSIONAL
+                // PROFESSIONAL FAILURE HANDLER
                 razorpay.on('payment.failed', function(response) {
-                    console.error('❌ Payment failed:', response.error);
+                    console.error('❌ Payment Failed:', response.error);
                     handlePaymentFailure(response);
                 });
 
@@ -431,69 +432,75 @@
                 razorpay.open();
                 
             } catch (error) {
-                console.error('Razorpay error:', error);
-                alert('❌ Payment gateway error. Please try again.');
+                console.error('Razorpay initialization error:', error);
+                alert('❌ Payment gateway error. Please refresh the page and try again.');
                 resetBuyButton();
             }
         }
 
-        // Handle Payment Success - PROFESSIONAL
+        // PROFESSIONAL SUCCESS HANDLER
         function handlePaymentSuccess(response, product) {
             try {
-                // Store payment data
+                // Store secure payment data
                 const paymentData = {
                     payment_id: response.razorpay_payment_id,
                     order_id: response.razorpay_order_id,
                     signature: response.razorpay_signature,
                     product_id: product.id,
                     product_name: product.title || product.name,
-                    amount: product.price || 99,
+                    amount: product.price,
+                    currency: 'INR',
                     timestamp: new Date().toISOString(),
                     status: 'completed'
                 };
                 
                 localStorage.setItem('payment_' + response.razorpay_payment_id, JSON.stringify(paymentData));
                 
-                // Update success message
-                successMessage.innerHTML = `
+                // Update payment details in modal
+                paymentDetails.innerHTML = `
                     Payment ID: <strong>${response.razorpay_payment_id}</strong><br>
-                    Product: <strong>${paymentData.product_name}</strong>
+                    Product: <strong>${paymentData.product_name}</strong><br>
+                    Amount: <strong>${utils.formatCurrency(paymentData.amount)}</strong>
                 `;
                 
-                // Show success modal
-                successModal.style.display = 'flex';
+                // Show professional success modal
+                paymentSuccessModal.style.display = 'flex';
                 
-                // Redirect to download
+                // Auto-redirect to download page
                 setTimeout(() => {
                     window.location.href = `download.html?payment_id=${response.razorpay_payment_id}&product_id=${product.id}`;
                 }, 3500);
                 
             } catch (error) {
                 console.error('Success handling error:', error);
-                // Fallback success handling
-                alert('✅ Payment Successful! Redirecting to download...');
+                // Fallback success flow
+                alert('✅ Payment Successful! Redirecting to download page...');
                 setTimeout(() => {
                     window.location.href = `download.html?payment_id=${response.razorpay_payment_id}&product_id=${product.id}`;
                 }, 2000);
             }
         }
 
-        // Handle Payment Failure - PROFESSIONAL
+        // PROFESSIONAL FAILURE HANDLER
         function handlePaymentFailure(response) {
-            let errorMessage = 'Payment failed. Please try again.';
+            let userMessage = 'Payment failed. Please try again.';
             
             if (response.error) {
                 const error = response.error;
                 
+                // Handle specific error codes professionally
                 switch(error.code) {
                     case 'PAYMENT_CANCELLED':
-                        errorMessage = 'Payment was cancelled.';
+                        userMessage = 'Payment was cancelled by you.';
                         break;
                     case 'PAYMENT_TIMED_OUT':
-                        errorMessage = 'Payment timed out. Please try again.';
+                        userMessage = 'Payment session expired. Please try again.';
                         break;
                     case 'AUTHENTICATION_FAILED':
-                        errorMessage = 'Authentication failed. Please check your payment details.';
+                        userMessage = 'Payment authentication failed. Please verify your details and try again.';
                         break;
                     case 'INSUFFICIENT_FUNDS':
-                        errorMessage = 'Insufficient funds.
+                        userMessage = 'Insufficient funds in your account. Please check your balance.';
+                        break;
+                    case 'CARD_DECLINED':
+                        userMessage = 'Your card was declined. Please try a differ
