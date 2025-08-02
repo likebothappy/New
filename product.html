@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - Source Code Store</title>
+    <title>Product Details - CodeStore</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- RAZORPAY SCRIPT - IMPORTANT! -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -125,7 +128,7 @@
         </div>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- JavaScript with REAL Razorpay Integration -->
     <script type="module">
         import { productService, utils } from './js/firebase-config.js';
 
@@ -138,6 +141,9 @@
         const productPrice = document.getElementById('product-price');
         const productDescription = document.getElementById('product-description');
         const buyNowBtn = document.getElementById('buy-now-btn');
+
+        // Store current product globally
+        let currentProduct = null;
 
         // Get product ID from URL
         function getProductIdFromUrl() {
@@ -157,10 +163,10 @@
             try {
                 showLoading();
                 
-                // Fetch product from Firebase
                 const result = await productService.getProduct(productId);
                 
                 if (result.success && result.product) {
+                    currentProduct = result.product;
                     displayProduct(result.product);
                 } else {
                     console.error('Product fetch failed:', result.error);
@@ -179,19 +185,17 @@
             // Update page title
             document.title = `${product.title || product.name} - CodeStore`;
             
-            // Display product image - MAIN FIX!
+            // Display product image
             if (product.imageUrl || product.image) {
                 productImage.src = product.imageUrl || product.image;
                 productImage.alt = product.title || product.name;
                 productImage.style.display = 'block';
                 
-                // Error handling for broken images
                 productImage.onerror = function() {
                     this.src = 'https://via.placeholder.com/500x400/6366f1/white?text=Image+Not+Available';
                     this.alt = 'Image not available';
                 };
             } else {
-                // Default placeholder if no image
                 productImage.src = 'https://via.placeholder.com/500x400/6366f1/white?text=No+Image';
                 productImage.alt = 'No image available';
             }
@@ -201,15 +205,125 @@
             productPrice.textContent = utils.formatCurrency(product.price || 0);
             productDescription.textContent = product.description || 'No description available.';
             
-            // Setup buy now button
+            // Setup buy now button with REAL payment
             if (buyNowBtn) {
-                buyNowBtn.onclick = () => initiatePayment(product);
+                buyNowBtn.onclick = () => initiateRazorpayPayment(product);
             }
             
-            // Show product container
             productContainer.style.display = 'block';
+            console.log('Product displayed:', product);
+        }
+
+        // REAL RAZORPAY PAYMENT INTEGRATION - MAIN FIX!
+        function initiateRazorpayPayment(product) {
+            if (!window.Razorpay) {
+                alert('Payment gateway not loaded. Please refresh the page and try again.');
+                return;
+            }
+
+            // Generate unique order ID
+            const orderId = 'order_' + Date.now() + Math.random().toString(36).substr(2, 9);
             
-            console.log('Product displayed:', product); // Debug log
+            const options = {
+                key: "rzp_test_1DP5mmOlF5G5ag", // Demo test key - Replace with your actual key
+                amount: Math.round((product.price || 70) * 100), // Amount in paise
+                currency: "INR",
+                name: "CodeStore",
+                description: `Purchase: ${product.title || product.name}`,
+                image: "https://cdn-icons-png.flaticon.com/512/1006/1006555.png", // CodeStore logo
+                order_id: orderId,
+                
+                // SUCCESS HANDLER
+                handler: function (response) {
+                    console.log('Payment successful:', response);
+                    
+                    // Show success message
+                    showPaymentSuccess(response, product);
+                    
+                    // Store payment info in localStorage for download page
+                    const paymentData = {
+                        payment_id: response.razorpay_payment_id,
+                        order_id: response.razorpay_order_id || orderId,
+                        signature: response.razorpay_signature,
+                        product_id: product.id,
+                        product_title: product.title || product.name,
+                        amount: product.price,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('payment_' + response.razorpay_payment_id, JSON.stringify(paymentData));
+                    
+                    // Redirect to download page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = `download.html?payment_id=${response.razorpay_payment_id}&product_id=${product.id}`;
+                    }, 2000);
+                },
+                
+                // PREFILL CUSTOMER DATA
+                prefill: {
+                    name: "Customer",
+                    email: "customer@example.com",
+                    contact: "9999999999"
+                },
+                
+                // PAYMENT NOTES
+                notes: {
+                    product_id: product.id,
+                    product_name: product.title || product.name,
+                    website: "CodeStore"
+                },
+                
+                // THEME
+                theme: {
+                    color: "#6D28D9"
+                },
+                
+                // MODAL SETTINGS
+                modal: {
+                    ondismiss: function() {
+                        console.log('Payment dialog closed by user');
+                    }
+                }
+            };
+
+            try {
+                const rzp = new Razorpay(options);
+                
+                // PAYMENT FAILED HANDLER
+                rzp.on('payment.failed', function (response) {
+                    console.error('Payment failed:', response.error);
+                    showPaymentError(response.error);
+                });
+                
+                // OPEN PAYMENT GATEWAY
+                rzp.open();
+                
+            } catch (error) {
+                console.error('Razorpay initialization error:', error);
+                alert('Payment gateway error. Please try again later.');
+            }
+        }
+
+        // Show payment success message
+        function showPaymentSuccess(response, product) {
+            const successDiv = document.createElement('div');
+            successDiv.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: #1F2937; padding: 2rem; border-radius: 12px; text-align: center; max-width: 400px; margin: 1rem;">
+                        <i class="fas fa-check-circle" style="font-size: 3rem; color: #10B981; margin-bottom: 1rem;"></i>
+                        <h2 style="color: #F9FAFB; margin-bottom: 1rem;">Payment Successful! 🎉</h2>
+                        <p style="color: #9CA3AF; margin-bottom: 0.5rem;">Payment ID: ${response.razorpay_payment_id}</p>
+                        <p style="color: #9CA3AF; margin-bottom: 1.5rem;">Product: ${product.title || product.name}</p>
+                        <p style="color: #10B981; font-weight: 600;">Redirecting to download page...</p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(successDiv);
+        }
+
+        // Show payment error message
+        function showPaymentError(error) {
+            alert(`Payment Failed! ❌\n\nReason: ${error.description || error.reason || 'Unknown error'}\n\nPlease try again or contact support.`);
         }
 
         // Show loading state
@@ -231,18 +345,14 @@
             productContainer.style.display = 'none';
         }
 
-        // Payment initiation (placeholder)
-        function initiatePayment(product) {
-            alert(`Payment for ${product.title} - ${utils.formatCurrency(product.price)}\n\nPayment integration will be added here.`);
-            console.log('Initiating payment for:', product);
-        }
-
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', loadProductDetails);
         
-        // Debug: Log URL params
+        // Debug info
+        console.log('Product page initialized');
         console.log('Current URL:', window.location.href);
         console.log('Product ID:', getProductIdFromUrl());
+        console.log('Razorpay loaded:', !!window.Razorpay);
     </script>
 </body>
 </html>
