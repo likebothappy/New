@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Your Purchase - CodeMarket</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="/" class="logo">Code<span>Market</span></a>
+            <!-- Desktop Navigation -->
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/terms">Terms</a></li>
+                <li><a href="/privacy">Privacy</a></li>
+            </ul>
+            <!-- Mobile Navigation (Hamburger Menu) -->
+            <button class="hamburger" aria-label="Toggle Menu">
+                <span class="line line-1"></span>
+                <span class="line line-2"></span>
+                <span class="line line-3"></span>
+            </button>
+        </nav>
+        <!-- Mobile Nav -->
+        <div class="mobile-nav">
+            <ul class="mobile-nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/terms">Terms</a></li>
+                <li><a href="/privacy">Privacy</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Loading State -->
+        <section id="loading-section" class="container">
+            <div class="hero">
+                <div class="spinner"></div>
+                <p style="margin-top: 1rem;">Verifying your purchase, please wait...</p>
+            </div>
+        </section>
+
+        <!-- Invalid Access -->
+        <section id="invalid-section" class="container hidden">
+            <div class="hero">
+                <div class="card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">❌</div>
+                    <h2>Invalid Access</h2>
+                    <p style="color: var(--text-secondary);">This page can only be accessed after a successful payment.</p>
+                    <a href="/" class="btn" style="margin-top: 1.5rem;">Back to Home</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Success -->
+        <section id="download-section" class="container hidden">
+            <div class="download-container">
+                <div class="card download-card">
+                    <div class="success-icon">✅</div>
+                    <h1>Payment Successful!</h1>
+                    <p class="subtitle">Thank you for your purchase. Your source code is ready for download.</p>
+                    
+                    <div class="purchase-details">
+                        <h3 class="details-title">Purchase Details</h3>
+                        <ul>
+                            <li><strong>Product:</strong> <span id="product-title"></span></li>
+                            <li><strong>Amount Paid:</strong> <span id="amount-paid"></span></li>
+                            <li><strong>Payment ID:</strong> <span id="payment-id"></span></li>
+                            <li><strong>Date:</strong> <span id="purchase-date"></span></li>
+                        </ul>
+                    </div>
+
+                    <button id="download-btn" class="btn btn-large download-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <span>Download Now</span>
+                    </button>
+                </div>
+
+                <div class="card instructions-card">
+                    <h3>What's Next? A Quick Start Guide</h3>
+                    <div class="instructions-grid">
+                        <div class="instruction-step">
+                            <div class="step-icon">1</div>
+                            <h4>Extract Files</h4>
+                            <p>Unzip the downloaded file to your desired project folder.</p>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-icon">2</div>
+                            <h4>Read Docs</h4>
+                            <p>Open the `README.md` file for setup and installation instructions.</p>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-icon">3</div>
+                            <h4>Start Building</h4>
+                            <p>Customize the code and integrate it into your project.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="/terms">Terms of Service</a>
+                <a href="/privacy">Privacy Policy</a>
+            </div>
+            <p>© 2024 CodeMarket. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script type="module">
+        // Inline styles for download page specific layout
+        const downloadStyles = `
+            .download-container { max-width: 700px; margin: 0 auto; }
+            .download-card { text-align: center; }
+            .success-icon { font-size: 4rem; line-height: 1; }
+            .download-card h1 { font-size: 2.5rem; color: var(--secondary-color); margin-top: 1rem; }
+            .subtitle { color: var(--text-secondary); margin-top: 0.5rem; margin-bottom: 2rem; font-size: 1.1rem; }
+            .purchase-details { background: var(--background-start); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; text-align: left; border: 1px solid var(--border-color); }
+            .details-title { font-size: 1rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+            .purchase-details ul { list-style: none; display: grid; gap: 0.75rem; }
+            .purchase-details li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; }
+            .purchase-details strong { color: var(--text-secondary); }
+            #payment-id { font-family: monospace; font-size: 0.9rem; word-break: break-all; }
+            .download-btn { width: 100%; animation: pulse 2s infinite; }
+            .instructions-card { margin-top: 2rem; }
+            .instructions-card h3 { text-align: center; margin-bottom: 2rem; }
+            .instructions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; }
+            .instruction-step { text-align: center; }
+            .step-icon { width: 40px; height: 40px; background: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin: 0 auto 1rem auto; }
+            .instruction-step h4 { margin-bottom: 0.5rem; }
+            .instruction-step p { font-size: 0.9rem; color: var(--text-secondary); }
+            .spinner { width: 40px; height: 40px; border: 4px solid var(--border-color); border-top-color: var(--primary-light); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+            @keyframes spin { to { transform: rotate(360deg); } }
+            @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); } 50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); } }
+        `;
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = downloadStyles;
+        document.head.appendChild(styleSheet);
+
+
+        import { productService } from './js/firebase-config.js';
+
+        // Hamburger Menu Logic
+        const hamburger = document.querySelector('.hamburger');
+        const mobileNav = document.querySelector('.mobile-nav');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+        });
+
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('product');
+        const paymentId = urlParams.get('payment');
+
+        // DOM elements
+        const loadingSection = document.getElementById('loading-section');
+        const invalidSection = document.getElementById('invalid-section');
+        const downloadSection = document.getElementById('download-section');
+        const downloadBtn = document.getElementById('download-btn');
+
+        let currentProduct = null;
+
+        async function verifyAndLoadProduct() {
+            if (!productId || !paymentId) {
+                showInvalidAccess();
+                return;
+            }
+
+            try {
+                const result = await productService.getProduct(productId);
+                if (result.success) {
+                    currentProduct = result.product;
+                    showDownloadPage();
+                } else {
+                    showInvalidAccess();
+                }
+            } catch (error) {
+                console.error('Error verifying purchase:', error);
+                showInvalidAccess();
+            }
+        }
+
+        function showDownloadPage() {
+            if (!currentProduct) return;
+
+            // Fill purchase details
+            document.getElementById('product-title').textContent = currentProduct.title;
+            document.getElementById('amount-paid').textContent = `₹${currentProduct.price.toLocaleString('en-IN')}`;
+            document.getElementById('payment-id').textContent = paymentId;
+            document.getElementById('purchase-date').textContent = new Date().toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            loadingSection.classList.add('hidden');
+            downloadSection.classList.remove('hidden');
+
+            downloadBtn.addEventListener('click', handleDownload);
+        }
+
+        function showInvalidAccess() {
+            loadingSection.classList.add('hidden');
+            invalidSection.classList.remove('hidden');
+        }
+
+        function handleDownload() {
+            if (!currentProduct?.downloadUrl) {
+                alert('Download link not available.');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.href = currentProduct.downloadUrl;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            downloadBtn.innerHTML = `<span>✅ Download Started</span>`;
+            downloadBtn.disabled = true;
+        }
+
+        window.addEventListener('load', verifyAndLoadProduct);
+    </script>
+</body>
+</html>
