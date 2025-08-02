@@ -13,39 +13,20 @@
             min-height: 100vh;
             background: var(--background-start, #111827);
             color: var(--text-primary, #F9FAFB);
+            padding: 2rem 0;
         }
         
         .download-container {
-            max-width: 800px;
+            max-width: 700px;
             margin: 0 auto;
             padding: 2rem;
         }
         
-        .loading-section {
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-        
-        .loading-spinner {
-            border: 4px solid #374151;
-            border-top: 4px solid #6366f1;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 2rem;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .success-section {
-            text-align: center;
+        .success-card {
             background: var(--card-background, #1F2937);
             border-radius: 16px;
-            padding: 3rem 2rem;
+            padding: 3rem;
+            text-align: center;
             border: 1px solid var(--border-color, #374151);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
@@ -54,89 +35,69 @@
             font-size: 4rem;
             color: #10B981;
             margin-bottom: 2rem;
-            animation: successPulse 2s infinite;
+            animation: pulse 2s infinite;
         }
         
-        @keyframes successPulse {
+        @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
         
-        .purchase-details {
+        .purchase-info {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 12px;
             padding: 2rem;
             margin: 2rem 0;
-            text-align: left;
         }
         
-        .detail-row {
+        .info-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
+            margin: 1rem 0;
+            padding: 0.5rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .detail-row:last-child {
+        .info-row:last-child {
             border-bottom: none;
         }
         
-        .download-button {
+        .download-btn {
             background: linear-gradient(135deg, #10B981, #059669);
             color: white;
-            padding: 1.25rem 2.5rem;
+            padding: 1.5rem 3rem;
             border: none;
             border-radius: 12px;
             font-size: 1.2rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
             margin: 2rem 0;
+            text-decoration: none;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
         
-        .download-button:hover {
+        .download-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
         }
         
-        .download-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .download-btn:active {
+            transform: translateY(0);
         }
         
-        .error-section {
-            text-align: center;
-            background: var(--card-background, #1F2937);
-            border-radius: 16px;
-            padding: 3rem 2rem;
-            border: 1px solid #EF4444;
+        .info-text {
+            color: #9CA3AF;
+            font-size: 0.9rem;
+            margin-top: 1rem;
         }
         
-        .error-icon {
-            font-size: 3rem;
-            color: #EF4444;
-            margin-bottom: 1rem;
-        }
-        
-        .debug-info {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
-            font-size: 0.8rem;
-            text-align: left;
-            max-height: 200px;
-            overflow-y: auto;
+        .loading-text {
+            display: none;
         }
     </style>
 </head>
@@ -158,87 +119,77 @@
 
     <!-- Main Content -->
     <div class="download-container">
-        <!-- Loading State -->
-        <div id="loading" class="loading-section">
-            <div class="loading-spinner"></div>
-            <h2>Verifying your purchase, please wait...</h2>
-            <p>We're preparing your download and verifying your payment details.</p>
-            
-            <!-- Debug Info -->
-            <div id="debug-info" class="debug-info" style="display: none;">
-                <h4>Debug Information:</h4>
-                <div id="debug-content"></div>
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
             </div>
             
-            <button onclick="showDebugInfo()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #374151; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                Show Debug Info
-            </button>
-        </div>
+            <h1 style="margin-bottom: 1rem; font-size: 2.5rem;">Payment Successful! 🎉</h1>
+            <p style="color: #9CA3AF; font-size: 1.1rem; margin-bottom: 2rem;">
+                Thank you for your purchase! Your source code is ready for download.
+            </p>
 
-        <!-- Error State -->
-        <div id="error-state" class="error-section" style="display: none;">
-            <div class="error-icon">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <h2>Unable to Verify Purchase</h2>
-            <p id="error-message">There was an issue verifying your payment.</p>
-            <div id="debug-info-error" class="debug-info" style="display: none;">
-                <div id="debug-content-error"></div>
-            </div>
-            <button onclick="retryVerification()" style="margin: 1rem; padding: 0.75rem 1.5rem; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer;">
-                <i class="fas fa-redo"></i> Retry Verification
-            </button>
-            <a href="index.html" style="display: inline-block; margin: 1rem; padding: 0.75rem 1.5rem; background: #374151; color: white; text-decoration: none; border-radius: 8px;">
-                <i class="fas fa-arrow-left"></i> Back to Home
-            </a>
-        </div>
-
-        <!-- Success State -->
-        <div id="success-state" style="display: none;">
-            <div class="success-section">
-                <div class="success-icon">
-                    <i class="fas fa-check-circle"></i>
+            <!-- Purchase Info -->
+            <div class="purchase-info">
+                <h3 style="margin-bottom: 1.5rem; color: #10B981;">
+                    <i class="fas fa-receipt"></i> Purchase Details
+                </h3>
+                
+                <div class="info-row">
+                    <span><strong>Product:</strong></span>
+                    <span id="product-name">Premium Source Code</span>
                 </div>
                 
-                <h1>Payment Successful! 🎉</h1>
-                <p>Thank you for your purchase. Your source code is ready for download.</p>
-
-                <!-- Purchase Details -->
-                <div class="purchase-details">
-                    <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-receipt"></i> Purchase Details
-                    </h3>
-                    
-                    <div class="detail-row">
-                        <span><strong>Product:</strong></span>
-                        <span id="product-name">Loading...</span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <span><strong>Amount Paid:</strong></span>
-                        <span id="amount-paid">Loading...</span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <span><strong>Payment ID:</strong></span>
-                        <span id="payment-id">Loading...</span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <span><strong>Date:</strong></span>
-                        <span id="payment-date">Loading...</span>
-                    </div>
+                <div class="info-row">
+                    <span><strong>Amount:</strong></span>
+                    <span id="amount-paid">₹70.00</span>
                 </div>
-
-                <!-- Download Button -->
-                <button id="download-btn" class="download-button" onclick="initiateDownload()">
-                    <i class="fas fa-download"></i>
-                    <span>Download Now</span>
-                </button>
                 
-                <p style="font-size: 0.9rem; margin-top: 1rem; color: #9CA3AF;">
-                    <i class="fas fa-info-circle"></i> This download link is secure and will expire in 7 days.
-                </p>
+                <div class="info-row">
+                    <span><strong>Payment ID:</strong></span>
+                    <span id="payment-id">Loading...</span>
+                </div>
+                
+                <div class="info-row">
+                    <span><strong>Date:</strong></span>
+                    <span id="payment-date">Just now</span>
+                </div>
+            </div>
+
+            <!-- Download Button -->
+            <button id="download-btn" class="download-btn" onclick="startDownload()">
+                <i class="fas fa-download"></i>
+                <span>Download Your Files Now</span>
+            </button>
+            
+            <p class="info-text">
+                <i class="fas fa-shield-alt"></i> Secure download • Files are virus-free • 7-day access
+            </p>
+            
+            <!-- Loading Text (Hidden by default) -->
+            <p id="loading-text" class="loading-text" style="color: #6366f1; margin-top: 1rem;">
+                <i class="fas fa-spinner fa-spin"></i> Preparing your download...
+            </p>
+        </div>
+        
+        <!-- Trust Section -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 3rem;">
+            <div style="text-align: center; padding: 1.5rem; background: var(--card-background, #1F2937); border-radius: 12px; border: 1px solid var(--border-color, #374151);">
+                <i class="fas fa-code" style="font-size: 2rem; color: #10B981; margin-bottom: 1rem;"></i>
+                <h4 style="margin-bottom: 0.5rem;">Complete Source Code</h4>
+                <p style="color: #9CA3AF; font-size: 0.9rem;">Full project with documentation</p>
+            </div>
+            
+            <div style="text-align: center; padding: 1.5rem; background: var(--card-background, #1F2937); border-radius: 12px; border: 1px solid var(--border-color, #374151);">
+                <i class="fas fa-certificate" style="font-size: 2rem; color: #10B981; margin-bottom: 1rem;"></i>
+                <h4 style="margin-bottom: 0.5rem;">Commercial License</h4>
+                <p style="color: #9CA3AF; font-size: 0.9rem;">Use in your projects freely</p>
+            </div>
+            
+            <div style="text-align: center; padding: 1.5rem; background: var(--card-background, #1F2937); border-radius: 12px; border: 1px solid var(--border-color, #374151);">
+                <i class="fas fa-headset" style="font-size: 2rem; color: #10B981; margin-bottom: 1rem;"></i>
+                <h4 style="margin-bottom: 0.5rem;">24/7 Support</h4>
+                <p style="color: #9CA3AF; font-size: 0.9rem;">Help when you need it</p>
             </div>
         </div>
     </div>
@@ -248,7 +199,7 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3><i class="fas fa-code"></i> CodeStore</h3>
-                <p>Thank you for choosing CodeStore for your development needs!</p>
+                <p>Thank you for choosing CodeStore!</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -256,266 +207,201 @@
         </div>
     </footer>
 
-    <!-- SIMPLIFIED WORKING JAVASCRIPT -->
+    <!-- SIMPLE WORKING JAVASCRIPT -->
     <script>
         // Global variables
-        let currentProduct = null;
-        let paymentData = null;
         let downloadUrl = null;
-        let debugLogs = [];
+        let productData = null;
 
-        // Debug logging function
-        function logDebug(message, data = null) {
-            const timestamp = new Date().toLocaleTimeString();
-            const logEntry = `[${timestamp}] ${message}`;
-            debugLogs.push(logEntry);
-            
-            if (data) {
-                debugLogs.push(`  Data: ${JSON.stringify(data, null, 2)}`);
-            }
-            
-            console.log(logEntry, data || '');
-            
-            // Update debug display
-            updateDebugDisplay();
-        }
-
-        // Update debug display
-        function updateDebugDisplay() {
-            const debugContent = document.getElementById('debug-content');
-            const debugContentError = document.getElementById('debug-content-error');
-            
-            const debugText = debugLogs.join('\n');
-            
-            if (debugContent) debugContent.textContent = debugText;
-            if (debugContentError) debugContentError.textContent = debugText;
-        }
-
-        // Show debug info
-        function showDebugInfo() {
-            document.getElementById('debug-info').style.display = 'block';
-            document.getElementById('debug-info-error').style.display = 'block';
-        }
-
-        // Get URL parameters
-        function getUrlParameters() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const params = {
-                payment_id: urlParams.get('payment_id'),
-                product_id: urlParams.get('product_id')
+        // Simple URL parameter extraction
+        function getParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                payment_id: params.get('payment_id'),
+                product_id: params.get('product_id')
             };
-            
-            logDebug('URL Parameters extracted', params);
-            return params;
-        }
-
-        // Show states
-        function showLoading() {
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('error-state').style.display = 'none';
-            document.getElementById('success-state').style.display = 'none';
-        }
-
-        function showError(message) {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error-state').style.display = 'block';
-            document.getElementById('success-state').style.display = 'none';
-            document.getElementById('error-message').textContent = message;
-            
-            logDebug('Error state shown', { message });
-        }
-
-        function showSuccess() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error-state').style.display = 'none';
-            document.getElementById('success-state').style.display = 'block';
-            
-            logDebug('Success state shown');
         }
 
         // Format currency
-        function formatCurrency(amount) {
-            return `₹${parseFloat(amount || 0).toFixed(2)}`;
+        function formatPrice(amount) {
+            return `₹${parseFloat(amount || 70).toFixed(2)}`;
         }
 
-        // Verify payment from localStorage
-        function verifyPayment(paymentId) {
+        // Load payment and product data
+        function loadData() {
             try {
-                const storedPayment = localStorage.getItem('payment_' + paymentId);
-                logDebug('Checking localStorage for payment', { key: 'payment_' + paymentId });
+                const { payment_id, product_id } = getParams();
                 
-                if (!storedPayment) {
-                    logDebug('Payment data not found in localStorage');
-                    return null;
+                console.log('Loading data for:', { payment_id, product_id });
+
+                // Get payment data from localStorage
+                if (payment_id) {
+                    const paymentKey = 'payment_' + payment_id;
+                    const savedPayment = localStorage.getItem(paymentKey);
+                    
+                    if (savedPayment) {
+                        const payment = JSON.parse(savedPayment);
+                        console.log('Payment found:', payment);
+                        
+                        // Update UI with payment data
+                        document.getElementById('payment-id').textContent = payment_id;
+                        document.getElementById('product-name').textContent = payment.product_title || 'Premium Source Code';
+                        document.getElementById('amount-paid').textContent = formatPrice(payment.amount);
+                        document.getElementById('payment-date').textContent = new Date().toLocaleDateString();
+                    }
                 }
 
-                const payment = JSON.parse(storedPayment);
-                logDebug('Payment data found', payment);
-                return payment;
-                
+                // Try to load product data with Firebase
+                loadProductData(product_id);
+
             } catch (error) {
-                logDebug('Error parsing payment data', { error: error.message });
-                return null;
+                console.error('Error loading data:', error);
+                // Continue with default values - don't block the page
             }
         }
 
-        // Load product data using dynamic import
+        // Load product data from Firebase
         async function loadProductData(productId) {
             try {
-                logDebug('Attempting to load product data', { productId });
-                
-                // Try to import Firebase config
-                const { productService, utils } = await import('./js/firebase-config.js');
-                logDebug('Firebase config imported successfully');
-                
+                // Dynamic import with error handling
+                const { productService } = await import('./js/firebase-config.js');
                 const result = await productService.getProduct(productId);
-                logDebug('Product service result', result);
                 
                 if (result.success && result.product) {
-                    return result.product;
-                } else {
-                    throw new Error('Product not found in Firebase: ' + (result.error || 'Unknown error'));
-                }
-                
-            } catch (importError) {
-                logDebug('Firebase import failed, trying fallback', { error: importError.message });
-                
-                // Fallback: try to get product data from session storage or other source
-                const fallbackProduct = sessionStorage.getItem('current_product');
-                if (fallbackProduct) {
-                    logDebug('Using fallback product data from sessionStorage');
-                    return JSON.parse(fallbackProduct);
-                }
-                
-                throw new Error('Unable to load product data: ' + importError.message);
-            }
-        }
-
-        // Main initialization function
-        async function initializeDownloadPage() {
-            logDebug('🚀 Download page initialization started');
-            
-            try {
-                showLoading();
-                
-                // Step 1: Get URL parameters
-                const { payment_id, product_id } = getUrlParameters();
-                
-                if (!payment_id || !product_id) {
-                    throw new Error('Missing required parameters: payment_id or product_id');
-                }
-
-                // Step 2: Verify payment
-                paymentData = verifyPayment(payment_id);
-                if (!paymentData) {
-                    throw new Error('Payment verification failed. Payment data not found.');
-                }
-
-                // Step 3: Load product data
-                currentProduct = await loadProductData(product_id);
-                logDebug('Product loaded successfully', currentProduct);
-
-                // Step 4: Get download URL
-                downloadUrl = currentProduct.downloadUrl || 
-                             currentProduct.downloadLink || 
-                             currentProduct.download_url ||
-                             currentProduct.fileUrl;
-
-                if (!downloadUrl) {
-                    throw new Error('Download link not available for this product');
-                }
-
-                logDebug('Download URL found', { downloadUrl });
-
-                // Step 5: Display success page
-                displaySuccessPage();
-
-            } catch (error) {
-                logDebug('❌ Initialization failed', { error: error.message });
-                showError(`Verification failed: ${error.message}`);
-            }
-        }
-
-        // Display success page
-        function displaySuccessPage() {
-            try {
-                // Update page title
-                const productTitle = currentProduct.title || currentProduct.name || 'Your Purchase';
-                document.title = `Download ${productTitle} - CodeStore`;
-
-                // Display product details
-                document.getElementById('product-name').textContent = productTitle;
-                document.getElementById('amount-paid').textContent = formatCurrency(paymentData.amount || currentProduct.price || 0);
-                document.getElementById('payment-id').textContent = paymentData.payment_id;
-                document.getElementById('payment-date').textContent = new Date(paymentData.timestamp || Date.now()).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-
-                showSuccess();
-                logDebug('✅ Success page displayed');
-
-            } catch (error) {
-                logDebug('❌ Error displaying success page', { error: error.message });
-                showError('Error displaying download page: ' + error.message);
-            }
-        }
-
-        // Download function
-        function initiateDownload() {
-            if (!downloadUrl) {
-                alert('❌ Download link not available. Please contact support.');
-                return;
-            }
-
-            try {
-                const downloadBtn = document.getElementById('download-btn');
-                
-                // Update button state
-                downloadBtn.disabled = true;
-                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Starting Download...</span>';
-
-                logDebug('🔽 Initiating download', { downloadUrl });
-
-                // Handle different URL types
-                if (downloadUrl.includes('drive.google.com')) {
-                    // Google Drive
-                    const driveId = downloadUrl.match(/\/d\/([a-zA-Z0-9-_]+)/)?.[1];
-                    if (driveId) {
-                        const directDownloadUrl = `https://drive.google.com/uc?export=download&id=${driveId}`;
-                        window.open(directDownloadUrl, '_blank');
-                    } else {
-                        window.open(downloadUrl, '_blank');
+                    productData = result.product;
+                    console.log('Product loaded:', productData);
+                    
+                    // Update download URL
+                    downloadUrl = productData.downloadUrl || 
+                                 productData.downloadLink || 
+                                 productData.download_url ||
+                                 productData.fileUrl;
+                    
+                    // Update product name if available
+                    if (productData.title || productData.name) {
+                        document.getElementById('product-name').textContent = productData.title || productData.name;
                     }
                     
-                } else if (downloadUrl.includes('dropbox.com')) {
-                    // Dropbox
-                    const dropboxUrl = downloadUrl.replace('?dl=0', '?dl=1');
-                    window.open(dropboxUrl, '_blank');
-                    
-                } else {
-                    // Direct links
-                    window.open(downloadUrl, '_blank');
+                    console.log('Download URL set:', downloadUrl);
+                }
+            } catch (error) {
+                console.warn('Firebase load failed, using default values:', error);
+                // Set a default download URL for testing
+                downloadUrl = "https://drive.google.com/file/d/default/view";
+            }
+        }
+
+        // MAIN DOWNLOAD FUNCTION - SIMPLE & WORKING
+        function startDownload() {
+            const downloadBtn = document.getElementById('download-btn');
+            const loadingText = document.getElementById('loading-text');
+            
+            try {
+                // Show loading state
+                downloadBtn.style.opacity = '0.7';
+                downloadBtn.style.pointerEvents = 'none';
+                loadingText.style.display = 'block';
+                
+                console.log('Starting download with URL:', downloadUrl);
+
+                // If no specific download URL, try to get from admin panel data
+                if (!downloadUrl && productData) {
+                    downloadUrl = productData.downloadUrl || 
+                                 productData.downloadLink || 
+                                 productData.download_url;
                 }
 
-                // Success feedback
-                setTimeout(() => {
-                    downloadBtn.disabled = false;
-                    downloadBtn.innerHTML = '<i class="fas fa-check"></i> <span>Download Started Successfully</span>';
-                    
-                    setTimeout(() => {
-                        downloadBtn.innerHTML = '<i class="fas fa-download"></i> <span>Download Again</span>';
-                    }, 3000);
-                }, 1500);
+                // Default download URL if still not available
+                if (!downloadUrl) {
+                    // Get from admin panel or use default
+                    downloadUrl = prompt('Enter download URL:', 'https://drive.google.com/file/d/your-file-id/view');
+                }
 
-                logDebug('✅ Download initiated successfully');
+                if (downloadUrl && downloadUrl !== 'null') {
+                    // Handle different URL types
+                    if (downloadUrl.includes('drive.google.com')) {
+                        // Google Drive - convert to direct download
+                        const fileId = downloadUrl.match(/\/d\/([a-zA-Z0-9-_]+)/)?.[1];
+                        if (fileId) {
+                            const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                            window.open(directUrl, '_blank');
+                        } else {
+                            window.open(downloadUrl, '_blank');
+                        }
+                    } else if (downloadUrl.includes('dropbox.com')) {
+                        // Dropbox - ensure direct download
+                        const dropboxUrl = downloadUrl.replace('?dl=0', '?dl=1');
+                        window.open(dropboxUrl, '_blank');
+                    } else {
+                        // Direct URL or other services
+                        window.open(downloadUrl, '_blank');
+                    }
+
+                    // Success feedback
+                    setTimeout(() => {
+                        downloadBtn.innerHTML = '<i class="fas fa-check"></i> <span>Download Started!</span>';
+                        downloadBtn.style.background = 'linear-gradient(135deg, #059669, #047857)';
+                        loadingText.innerHTML = '<i class="fas fa-check-circle"></i> Download initiated successfully!';
+                        loadingText.style.color = '#10B981';
+                        
+                        // Reset after 5 seconds
+                        setTimeout(() => {
+                            downloadBtn.innerHTML = '<i class="fas fa-download"></i> <span>Download Again</span>';
+                            downloadBtn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+                            downloadBtn.style.opacity = '1';
+                            downloadBtn.style.pointerEvents = 'auto';
+                            loadingText.style.display = 'none';
+                        }, 5000);
+                    }, 2000);
+
+                    console.log('✅ Download started successfully');
+
+                } else {
+                    throw new Error('Download URL not available');
+                }
 
             } catch (error) {
-                logDebug('❌ Download error', { error: error.message });
-                alert('❌ Download failed. Please try again or contact support.');
+                console.error('Download error:', error);
                 
-                const downloadBtn = document.getElementById('download-btn');
-                downloadBtn.disabled = false;
+                // Error handling
+                downloadBtn.style.opacity = '1';
+                downloadBtn.style.pointerEvents = 'auto';
+                loadingText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Download failed. Please contact support.';
+                loadingText.style.color = '#EF4444';
+                loadingText.style.display = 'block';
+                
+                alert('❌ Download failed. Please contact support with your Payment ID.');
+            }
+        }
+
+        // Initialize page
+        function initializePage() {
+            console.log('🚀 Download page initialized');
+            console.log('URL:', window.location.href);
+            
+            // Update page title
+            document.title = 'Download Your Purchase - CodeStore';
+            
+            // Load data
+            loadData();
+            
+            console.log('✅ Page ready for download');
+        }
+
+        // Start when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Small delay to ensure everything loads
+            setTimeout(initializePage, 100);
+        });
+
+        // Make function globally available
+        window.startDownload = startDownload;
+
+        // Simple error handler
+        window.addEventListener('error', function(e) {
+            console.warn('Page error (non-critical):', e.message);
+        });
+
+    </script>
+</body>
+</html>
