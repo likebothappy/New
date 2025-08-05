@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - CodeCraft</title>
+    <meta name="robots" content="noindex, nofollow"> <!-- Prevent search engines from indexing admin page -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Fonts are imported in style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Admin Specific Overrides/Adjustments/Additional Styles (moved from inline, adjusted for new theme) */
+        .admin-layout-wrapper {
+            display: flex; /* For two-column layout (sidebar + main content) */
+            min-height: 100vh; /* Ensure it takes full height */
+            background: var(--background-dark); /* Main background */
+            gap: 4px; /* Slight gap between sidebar and main content as per your sample */
+        }
+        .admin-sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--text-white);
+            padding-bottom: 20px; /* space before nav */
+        }
+        .admin-sidebar-header h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .admin-sidebar-header svg {
+            width: 24px;
+            height: 24px;
+            color: var(--text-light-green); /* Example: Change logo icon color */
+        }
+
+        /* Login Section (re-integrated) */
+        #login-section {
+            flex: 1; /* Take full width when active */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            background: var(--background-dark);
+            position: absolute; /* To overlay content */
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1001; /* Above dashboard */
+        }
+        #login-section.hidden {
+            display: none;
+        }
+        .login-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color-new);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+        .login-card h2 {
+            margin-bottom: 2rem;
+            color: var(--text-white);
+        }
+        .login-card .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .login-card .btn {
+            width: 100%;
+            margin-top: 1rem;
+            background: var(--primary-color);
+        }
+
+        /* Admin Dashboard Layout */
+        #admin-dashboard {
+            display: flex; /* Two column layout */
+            flex: 1;
+            width: 100%; /* Take remaining space */
+            gap: 4px; /* Gap from your new design */
+        }
+        #admin-dashboard.hidden {
+            display: none;
+        }
+
+        /* Admin Dashboard Main Content Area */
+        .admin-main-content-wrapper {
+            padding-top: 20px; /* py-5 */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 960px; /* max-w-[960px] */
+        }
+
+        /* Add/Edit Product Modal - re-styling for new theme */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
+            z-index: 1010;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1; visibility: visible;
+        }
+        .modal-content {
+            background: var(--secondary-color); /* Matches new theme */
+            border-radius: 12px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color-new);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            max-width: 600px; width: 95%; max-height: 90vh; overflow-y: auto;
+            transform: translateY(20px); transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
+        }
+        .modal-header h3 {
+            color: var(--text-white);
+            font-size: 1.8rem;
+        }
+        .close-btn {
+            background: none; border: none; color: var(--text-light-green); /* Matches new theme */
+            font-size: 2rem; cursor: pointer; line-height: 1;
+        }
+        .form-actions {
+            display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;
+        }
+        /* Overriding btn-secondary specific to admin modal */
+        #product-modal .btn-secondary {
+            background: var(--tertiary-color); /* Matches new theme */
+            color: var(--text-white);
+        }
+        #product-modal .btn-secondary:hover {
+            background: var(--border-color-new); /* Darker on hover */
+        }
+        
+        /* General styling for headers/sections in main content */
+        .admin-main-content-wrapper h3 {
+            color: var(--text-white);
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 700; /* font-bold */
+            line-height: 1.25; /* leading-tight */
+            letter-spacing: -0.015em; /* tracking-[-0.015em] */
+            padding-left: 16px; /* px-4 */
+            padding-bottom: 8px; /* pb-2 */
+            padding-top: 16px; /* pt-4 */
+        }
+
+        /* No Products Message */
+        #no-products-admin {
+            text-align: center; padding: 2rem;
+            color: var(--text-light-green);
+        }
+        #no-products-admin a {
+            color: var(--primary-color); /* Link color */
+            text-decoration: underline;
+        }
+
+        .spinner { /* Re-using existing spinner */
+            width: 40px; height: 40px; border: 4px solid var(--border-color-new); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;
+        }
+
+        /* Responsive for Admin Sidebar */
+        @media (max-width: 992px) {
+            .admin-layout-wrapper {
+                flex-direction: column; /* Stack sidebar and main content */
+                gap: 0; /* Remove gap when stacked */
+            }
+            .admin-sidebar {
+                width: 100%; /* Full width on mobile */
+                min-height: unset; /* Remove min-height */
+                height: auto; /* Auto height */
+                border-right: none;
+                border-bottom: 1px solid var(--border-color-new); /* Add border to bottom */
+                position: sticky; /* Make it sticky so it scrolls with content */
+                top: 0;
+                z-index: 999;
+                padding-bottom: 0; /* Remove padding-bottom, handled by toggle button */
+            }
+            .admin-sidebar-header {
+                padding-top: 16px;
+            }
+            /* Hide sidebar nav by default on mobile, show on toggle */
+            .admin-nav-wrapper {
+                display: none;
+                flex-direction: column;
+                padding-bottom: 16px; /* Padding for collapsed state */
+            }
+            .admin-sidebar.expanded .admin-nav-wrapper {
+                display: flex; /* Show when expanded */
+            }
+            .admin-sidebar-toggle-btn { /* New button to toggle sidebar on mobile */
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 12px 0;
+                cursor: pointer;
+                background: transparent;
+                border: none;
+                color: var(--text-white);
+                font-size: 1rem;
+                font-weight: 600;
+                border-top: 1px solid var(--border-color-new); /* Separator */
+            }
+            .admin-sidebar-toggle-btn svg {
+                transition: transform 0.3s ease;
+            }
+            .admin-sidebar.expanded .admin-sidebar-toggle-btn svg {
+                transform: rotate(180deg);
+            }
+            .admin-main-content {
+                max-width: 100%; /* Full width */
+                padding: 0 16px; /* Add some side padding */
+            }
+            .admin-section-heading {
+                padding: 16px 0; /* Adjust padding for mobile */
+            }
+            .admin-products-table-heading {
+                padding-left: 0 !important; /* Remove left padding for main heading */
+            }
+            .admin-form-group {
+                padding-left: 0 !important; /* Remove left padding for forms */
+                padding-right: 0 !important;
+            }
+            .admin-table-wrapper {
+                margin: 12px 0; /* Adjust margin for mobile */
+            }
+            /* Admin table cells width will be handled by overflow-x auto, no need for fixed width */
+            .admin-table th, .admin-table td {
+                width: unset !important;
+            }
+            .admin-table th.product-actions, .admin-table td.product-actions {
+                width: auto !important; /* Adjust if actions are too wide */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                padding: 12px; /* Smaller sidebar padding */
+            }
+            .admin-sidebar-header {
+                padding-bottom: 12px;
+                gap: 10px;
+            }
+            .admin-sidebar-header h1 {
+                font-size: 1.1rem;
+            }
+            .admin-sidebar-header svg {
+                width: 20px;
+                height: 20px;
+            }
+            .admin-sidebar-toggle-btn {
+                padding: 8px 0;
+                font-size: 0.9rem;
+            }
+            .admin-nav-link {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+                gap: 10px;
+            }
+            .admin-nav-link svg {
+                width: 20px;
+                height: 20px;
+            }
+            .admin-main-content {
+                padding: 0 8px;
+            }
+            .admin-section-heading {
+                padding: 12px 0;
+            }
+            .admin-section-heading h2 {
+                font-size: 28px;
+            }
+            .admin-main-content-wrapper h3 {
+                font-size: 1rem;
+                padding-top: 10px;
+                padding-bottom: 6px;
+            }
+            .form-control {
+                height: 48px;
+                padding: 12px;
+            }
+            .admin-table th, .admin-table td {
+                padding: 8px 10px;
+                font-size: 0.8rem;
+            }
+            .admin-table td {
+                height: 60px;
+            }
+            .admin-action-btn {
+                font-size: 0.75rem;
+            }
+            .login-card {
+                padding: 1.5rem;
+            }
+            .login-card h2 {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+            .login-card .form-group {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="relative flex size-full min-h-screen flex-col bg-[var(--background-dark)] group/design-root overflow-x-hidden" style='font-family: var(--font-family);'>
+        <div class="layout-container-admin flex h-full grow flex-col">
+            <!-- Admin Login Section -->
+            <section id="login-section" class="hidden">
+                <div class="login-card">
+                    <h2 class="text-center">Admin Login</h2>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" required autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" class="form-control" required autocomplete="current-password">
+                        </div>
+                        <button type="submit" class="btn btn-primary" data-original-text="Login">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            <span>Secure Login</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Admin Dashboard -->
+            <div id="admin-dashboard" class="hidden admin-layout-wrapper">
+                <!-- Left Sidebar -->
+                <div class="admin-sidebar" id="admin-sidebar">
+                    <div class="flex flex-col gap-4">
+                        <div class="admin-sidebar-header">
+                             <!-- Logo from your sample -->
+                             <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor"></path>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor"></path>
+                            </svg>
+                            <h1>Admin Panel</h1>
+                        </div>
+                        
+                        <!-- Mobile Sidebar Toggle (visible on smaller screens) -->
+                        <button class="admin-sidebar-toggle-btn" id="admin-sidebar-toggle-btn">
+                            Navigation
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
+                                <path d="M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z"></path>
+                            </svg>
+                        </button>
+
+                        <div class="admin-nav-wrapper" id="admin-nav-wrapper">
+                            <div class="admin-nav-links">
+                                <!-- Nav links for Dashboard, Products, Orders, Customers, Settings -->
+                                <a href="#" class="admin-nav-link" data-section="dashboard">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                        <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
+                                    </svg>
+                                    <p>Dashboard</p>
+                                </a>
+                                <a href="#" class="admin-nav-link active" data-section="products">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                        <path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.35,44L178.57,92.29l-80.35-44Zm0,88L47.65,76,81.56,57.43l80.35,44Zm88,55.85h0l-80,43.79V133.83l32-17.51V152a8,8,0,0,0,16,0V107.56l32-17.51v85.76Z"></path>
+                                    </svg>
+                                    <p>Products</p>
+                                </a>
+                                <a href="#" class="admin-nav-link" data-section="orders">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                        <path d="M72,104a8,8,0,0,1,8-8h96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,104Zm8,40h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16ZM232,56V208a8,8,0,0,1-11.58,7.15L192,200.94l-28.42,14.21a8,8,0,0,1-7.16,0L128,200.94,99.58,215.15a8,8,0,0,1-7.16,0L64,200.94,35.58,215.15A8,8,0,0,1,24,208V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56Zm-16,0H40V195.06l20.42-10.22a8,8,0,0,1,7.16,0L96,199.06l28.42-14.22a8,8,0,0,1,7.16,0L160,199.06l28.42-14.22a8,8,0,0,1,7.16,0L216,195.06Z"></path>
+                                    </svg>
+                                    <p>Orders</p>
+                                </a>
+                                <a href="#" class="admin-nav-link" data-section="customers">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                        <path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,0,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"></path>
+                                    </svg>
+                                    <p>Customers</p>
+                                </a>
+                                <a href="#" class="admin-nav-link" data-section="settings">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                        <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"></path>
+                                    </svg>
+                                    <p>Settings</p>
+                                </a>
+                                <!-- Logout link -->
+                                <a href="#" class="admin-nav-link" id="logout-link-admin" onclick="handleLogout()">
+                                    <i class="fas fa-sign-out-alt" style="font-size: 24px; width: 24px;"></i> <!-- FontAwesome icon for logout -->
+                                    <p>Logout</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Main Content -->
+                <div class="admin-main-content">
+                    <div class="admin-section-heading">
+                        <h2>Products</h2>
+                        <button id="add-product-btn" class="btn btn-primary">
+                            <span class="truncate">Add New Product</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Add/Edit Product Modal (re-styled) -->
+                    <div id="product-modal" class="modal-overlay">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 id="modal-title">Add New Product</h3>
+                                <button id="close-modal" class="close-btn">×</button>
+                            </div>
+                            <form id="product-form">
+                                <input type="hidden" id="product-id">
+                                <div class="form-group admin-form-group">
+                                    <label for="product-title-input">Product Title</label>
+                                    <input type="text" id="product-title-input" class="form-control" placeholder="Enter product name" required>
+                                </div>
+                                <div class="form-group admin-form-group">
+                                    <label for="product-description-input">Description</label>
+                                    <textarea id="product-description-input" class="form-control" rows="4" placeholder="Enter product description" required></textarea>
+                                </div>
+                                <div class="form-group admin-form-group">
+                                    <label for="product-price-input">Price (₹)</label>
+                                    <input type="number" id="product-price-input" class="form-control" min="0" step="1" placeholder="Enter price" required>
+                                </div>
+                                <div class="form-group admin-form-group">
+                                    <label for="product-image-input">Image URL</label>
+                                    <input type="url" id="product-image-input" class="form-control" placeholder="Enter image URL">
+                                </div>
+                                <div class="form-group admin-form-group">
+                                    <label for="product-download-input">Download Link</label>
+                                    <input type="url" id="product-download-input" class="form-control" placeholder="Enter download link" required>
+                                </div>
+                                <div class="form-group admin-form-group">
+                                    <label for="product-category-input">Category</label>
+                                    <select id="product-category-input" class="form-control">
+                                        <option value="">Select category</option>
+                                        <option value="APIs">APIs</option>
+                                        <option value="Bots">Bots</option>
+                                        <option value="Scripts">Scripts</option>
+                                        <option value="Templates">Templates</option>
+                                        <!-- Add more categories here as per your products -->
+                                    </select>
+                                </div>
+                                <div class="form-actions admin-form-group action-button">
+                                    <button type="button" id="cancel-btn" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary" data-original-text="Save Product">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                        <span>Save Product</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <h3 class="admin-products-table-heading">All Products</h3>
+                    <!-- Products Table -->
+                    <div class="admin-table-wrapper">
+                        <div id="products-loading" class="text-center" style="padding: 2rem; display: block;">
+                            <div class="spinner"></div>
+                        </div>
+                        
+                        <div id="products-content" class="hidden">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th class="product-name">Name</th>
+                                        <th class="product-price">Price</th>
+                                        <th class="product-category">Category</th>
+                                        <th class="product-actions" style="text-align: right;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="products-tbody">
+                                    <!-- Products will be loaded here dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="no-products-admin" class="hidden">
+                            <p>No products found. <a href="#" onclick="showAddProductModal()">Add your first product</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script type="module">
+        import { authService, productService, utils } from './js/firebase-config.js';
+
+        // DOM elements
+        const loginSection = document.getElementById('login-section');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const loginForm = document.getElementById('login-form');
+        const productModal = document.getElementById('product-modal');
+        const productForm = document.getElementById('product-form');
+        const productsLoading = document.getElementById('products-loading');
+        const productsContent = document.getElementById('products-content');
+        const noProducts = document.getElementById('no-products-admin');
+        const productsTbody = document.getElementById('products-tbody');
+        const modalTitle = document.getElementById('modal-title');
+        const adminSidebar = document.getElementById('admin-sidebar');
+        const adminNavLinks = document.querySelectorAll('.admin-nav-link');
+        const adminSidebarToggleBtn = document.getElementById('admin-sidebar-toggle-btn');
+        const adminNavWrapper = document.getElementById('admin-nav-wrapper'); // For mobile toggle
+
+        // Global functions (needed for onclick attributes in HTML)
+        window.handleLogout = () => authService.signOut().then(res => {
+            if (res.success) {
+                alert('Logged out successfully!');
+                // Optionally redirect to login or homepage
+                window.location.href = 'admin.html'; // Redirect to login page after logout
+            } else {
+                alert('Logout failed: ' + res.error);
+            }
+        });
+        window.showAddProductModal = showAddProductModal;
+        window.editProduct = editProduct;
+        window.deleteProduct = deleteProduct;
+        
+        // Auth state listener
+        authService.onAuthStateChanged(user => {
+            if (user) {
+                loginSection.classList.add('hidden');
+                adminDashboard.classList.remove('hidden');
+                loadProducts(); // Load products once user is authenticated
+            } else {
+                loginSection.classList.remove('hidden');
+                adminDashboard.classList.add('hidden');
+            }
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const result = await authService.signIn(email, password);
+            if (!result.success) {
+                alert(result.error);
+            }
+            // The onAuthStateChanged listener will handle UI update on success
+        });
+
+        // Product form submission (Add/Edit)
+        productForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const productData = {
+                title: document.getElementById('product-title-input').value,
+                description: document.getElementById('product-description-input').value,
+                price: parseFloat(document.getElementById('product-price-input').value),
+                imageUrl: document.getElementById('product-image-input').value,
+                downloadUrl: document.getElementById('product-download-input').value,
+                category: document.getElementById('product-category-input').value // New field
+            };
+            const productId = document.getElementById('product-id').value;
+            let result;
+            if (productId) {
+                result = await productService.updateProduct(productId, productData);
+            } else {
+                result = await productService.addProduct(productData);
+            }
+            
+            if (result.success) {
+                hideProductModal();
+                loadProducts(); // Reload products to update the table
+            } else {
+                alert(result.error);
+            }
+        });
+
+        // Modal listeners
+        document.getElementById('add-product-btn').addEventListener('click', showAddProductModal);
+        document.getElementById('close-modal').addEventListener('click', hideProductModal);
+        document.getElementById('cancel-btn').addEventListener('click', hideProductModal);
+        productModal.addEventListener('click', (e) => {
+            // Close modal if clicked outside content area
+            if (e.target === productModal) {
+                hideProductModal();
+            }
+        });
+
+        // Functions for products
+        function showAddProductModal() {
+            productForm.reset(); // Clear form fields
+            document.getElementById('product-id').value = ''; // Clear hidden ID
+            modalTitle.textContent = 'Add New Product'; // Set modal title
+            productModal.classList.add('active'); // Show modal
+        }
+
+        function hideProductModal() {
+            productModal.classList.remove('active'); // Hide modal
+        }
+
+        async function editProduct(productId) {
+            const result = await productService.getProduct(productId);
+            if (result.success) {
+                const p = result.product;
+                modalTitle.textContent = 'Edit Product';
+                document.getElementById('product-id').value = productId;
+                document.getElementById('product-title-input').value = p.title || '';
+                document.getElementById('product-description-input').value = p.description || '';
+                document.getElementById('product-price-input').value = p.price || '';
+                document.getElementById('product-image-input').value = p.imageUrl || '';
+                document.getElementById('product-download-input').value = p.downloadUrl || '';
+                document.getElementById('product-category-input').value = p.category || ''; // Set category
+                productModal.classList.add('active'); // Show modal with pre-filled data
+            } else {
+                alert('Error loading product for edit: ' + result.error);
+            }
+        }
+
+        async function deleteProduct(productId) {
+            if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+                return; // User cancelled
+            }
+            const result = await productService.deleteProduct(productId);
+            if (result.success) {
+                loadProducts(); // Reload products to update the table
+            } else {
+                alert('Error deleting product: ' + result.error);
+            }
+        }
+
+        async function loadProducts() {
+            productsLoading.classList.remove('hidden'); // Show loading spinner
+            productsContent.classList.add('hidden'); // Hide content
+            noProducts.classList.add('hidden'); // Hide "no products" message
+
+            const result = await productService.getProducts();
+            productsLoading.classList.add('hidden'); // Hide loading spinner
+
+            if (result.success && result.products.length > 0) {
+                productsContent.classList.remove('hidden'); // Show content
+                productsTbody.innerHTML = result.products.map(p => `
+                    <tr class="admin-table-row">
+                        <td class="product-name">${p.title || 'N/A'}</td>
+                        <td class="product-price">₹${(p.price || 0).toLocaleString('en-IN')}</td>
+                        <td class="product-category">${p.category || 'N/A'}</td>
+                        <td class="product-actions" style="text-align: right;">
+                            <button onclick="editProduct('${p.id}')" class="admin-action-btn edit" title="Edit">Edit</button> | 
+                            <button onclick="deleteProduct('${p.id}')" class="admin-action-btn delete" title="Delete">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                noProducts.classList.remove('hidden'); // Show "no products" message
+            }
+        }
+
+        // Admin Sidebar Toggle for Mobile
+        adminSidebarToggleBtn.addEventListener('click', () => {
+            adminSidebar.classList.toggle('expanded');
+        });
+
+        // Admin Nav Link Click (for highlighting active state and potentially loading content)
+        adminNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default link behavior
+                
+                // Remove 'active' from all links and add to the clicked one
+                adminNavLinks.forEach(nav => nav.classList.remove('active'));
+                link.classList.add('active');
+                
+                // If on mobile, collapse sidebar after clicking a link
+                if (window.innerWidth <= 992) { // Match media query breakpoint from style.css
+                    adminSidebar.classList.remove('expanded');
+                }
+
+                // --- Content Loading Logic (Example for multiple sections) ---
+                const section = link.dataset.section;
+                console.log(`Navigated to: ${section} section`);
+
+                // Hide all content containers (if you have them)
+                productsContent.classList.add('hidden');
+                productsLoading.classList.add('hidden');
+                noProducts.classList.add('hidden');
+
+                // Show content based on selected section
+                if (section === 'products') {
+                    loadProducts(); // Reload products when Products section is active
+                } else {
+                    // For other sections, you'd load their specific content here
+                    // For now, just show a "Coming Soon" message
+                    productsTbody.innerHTML = ''; // Clear table
+                    noProducts.classList.remove('hidden');
+                    noProducts.innerHTML = `<p style="color: var(--text-light-green);">Coming Soon! This is the ${section} section. Functionality to be added.</p>`;
+                }
+            });
+        });
+
+        // Initialize Admin Panel (already handled by onAuthStateChanged)
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Admin Panel loaded.');
+            // Initial check for active sidebar link (default to Products)
+            document.querySelector('.admin-nav-link[data-section="products"]').classList.add('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,834 @@
+/* === Import Font === */
+/* Noto Sans is also used in the new design */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@400;500;700;900&display=swap');
+
+/* === Base & Reset Styles === */
+:root {
+/* New Color Palette from your HTML */
+--primary-color: #019863; /* Main Action Button Green */
+--primary-light: #059669; /* Slightly lighter primary for hover */
+--secondary-color: #214a3c; /* Header background, card background, secondary buttons */
+--tertiary-color: #17352b; /* Input background, table header */
+--background-dark: #10231c; /* Main body background */
+--text-white: #F9FAFB; /* Primary text color (white) */
+--text-light-green: #8ecdb7; /* Secondary text color, placeholder */
+--border-color-new: #2f6a55; /* New border color */
+--shadow-color: rgba(0, 0, 0, 0.4); /* Consistent shadow */
+--font-family: 'Inter', "Noto Sans", sans-serif; /* New font family */
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+html {
+scroll-behavior: smooth;
+}
+
+body {
+font-family: var(--font-family);
+background: var(--background-dark); /* New dark background */
+color: var(--text-white); /* Main text color */
+line-height: 1.6;
+min-height: 100vh;
+}
+
+/* === Container === */
+.container {
+max-width: 1280px;
+margin: 0 auto;
+padding: 0 24px;
+}
+
+/* --- Header --- */
+/* Your current header styles will be replaced by the new header's look */
+header {
+background: var(--secondary-color); /* Header background from new design */
+border-bottom: 1px solid var(--border-color-new); /* New border color */
+position: sticky; /* Changed from fixed to sticky for smoother scroll */
+top: 0;
+left: 0;
+right: 0;
+z-index: 1000;
+}
+
+nav {
+display: flex;
+justify-content: space-between;
+align-items: center;
+height: 64px; /* Slightly adjusted height */
+padding: 0 40px; /* From new design */
+}
+
+.logo {
+font-size: 1.75rem;
+font-weight: 800;
+color: var(--text-white);
+text-decoration: none;
+letter-spacing: -1px;
+display: flex; /* To align icon with text */
+align-items: center;
+gap: 16px; /* Space between icon and text */
+}
+
+.logo span {
+color: var(--text-white); /* Logo span color, not accent */
+font-weight: 800; /* Ensure it's bold */
+}
+
+/* New Logo Icon Specific Styling (adjust if needed) */
+.logo svg {
+color: var(--text-light-green); /* Example: Change logo icon color */
+width: 24px;
+height: 24px;
+}
+
+.nav-links {
+display: flex;
+list-style: none;
+gap: 36px; /* Spacing from new design */
+margin-left: 32px; /* Gap between logo group and nav links */
+}
+
+.nav-links a {
+text-decoration: none;
+color: var(--text-white); /* Nav links text color */
+font-weight: 500;
+transition: color 0.3s ease;
+position: relative;
+padding: 4px 0;
+}
+
+.nav-links a:hover {
+color: var(--text-light-green); /* Hover color */
+}
+
+/* Remove ::after effect as it's not in the new design */
+.nav-links a::after {
+content: none;
+}
+
+/* --- Header Search & Buttons --- */
+.header-right {
+display: flex;
+flex: 1;
+justify-content: flex-end;
+gap: 32px; /* Space between search and buttons */
+}
+
+.search-label {
+display: flex;
+flex-direction: column;
+min-width: 160px;
+max-width: 256px;
+height: 40px; /* Fixed height for search input */
+}
+
+.search-input-wrapper {
+display: flex;
+width: 100%;
+flex: 1;
+align-items: stretch;
+border-radius: 8px; /* Rounded-lg */
+height: 100%;
+background: var(--secondary-color); /* Matches header background */
+}
+
+.search-icon-wrapper {
+color: var(--text-light-green); /* Search icon color */
+display: flex;
+border: none;
+background: transparent; /* No background */
+align-items: center;
+justify-content: center;
+padding-left: 16px; /* pl-4 */
+border-radius: 8px 0 0 8px; /* rounded-l-lg */
+}
+
+.search-input {
+flex: 1;
+min-width: 0;
+resize: none;
+overflow: hidden;
+border-radius: 8px; /* flex-1 rounded-lg */
+color: var(--text-white);
+outline: 0; /* focus:outline-0 */
+border: none; /* border-none */
+background: transparent; /* bg-[#214a3c] - same as wrapper */
+padding: 0 16px; /* px-4 */
+font-size: 1rem;
+font-weight: normal;
+line-height: normal;
+border-left: 0; /* border-l-0 */
+padding-left: 8px; /* pl-2 */
+}
+
+.search-input::placeholder {
+color: var(--text-light-green); /* placeholder:text-[#8ecdb7] */
+}
+
+.header-buttons {
+display: flex;
+gap: 8px; /* gap-2 */
+}
+
+/* --- Buttons (Common Styles) --- */
+.btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+border-radius: 8px; /* rounded-lg */
+height: 40px; /* h-10 */
+padding: 0 16px; /* px-4 */
+text-decoration: none;
+font-size: 0.875rem; /* text-sm */
+font-weight: 700; /* font-bold */
+line-height: normal;
+letter-spacing: 0.015em; /* tracking-[0.015em] */
+cursor: pointer;
+transition: background 0.2s ease, transform 0.2s ease;
+border: none; /* Important to remove default button border */
+}
+
+.btn-primary { /* Submit Button */
+background: var(--primary-color); /* bg-[#019863] */
+color: var(--text-white);
+}
+
+.btn-primary:hover {
+background: var(--primary-light); /* Slightly darker green on hover */
+transform: translateY(-1px); /* Small lift */
+}
+
+.btn-secondary { /* Sign In Button / Category Pill background */
+background: var(--secondary-color); /* bg-[#214a3c] */
+color: var(--text-white);
+}
+
+.btn-secondary:hover {
+background: #2f5d4f; /* Slightly darker on hover */
+transform: translateY(-1px);
+}
+
+/* --- Mobile Navigation --- */
+.hamburger {
+display: none; /* Hidden by default for desktop */
+flex-direction: column;
+justify-content: space-around;
+width: 24px;
+height: 24px;
+background: transparent;
+border: none;
+cursor: pointer;
+padding: 0;
+z-index: 1011;
+}
+
+.hamburger .line {
+width: 24px;
+height: 2px;
+background: var(--text-white);
+border-radius: 10px;
+transition: all 0.3s linear;
+position: relative;
+transform-origin: 1px;
+}
+
+.hamburger.active .line-1 { transform: rotate(45deg); }
+.hamburger.active .line-2 { opacity: 0; transform: translateX(20px); }
+.hamburger.active .line-3 { transform: rotate(-45deg); }
+
+.mobile-nav {
+display: none; /* Hidden by default */
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(16, 35, 28, 0.98); /* Slightly transparent dark background */
+backdrop-filter: blur(10px);
+z-index: 1010;
+align-items: center;
+justify-content: center;
+}
+
+.mobile-nav.active {
+display: flex;
+}
+
+.mobile-nav-links {
+list-style: none;
+text-align: center;
+}
+
+.mobile-nav-links li {
+margin-bottom: 2.5rem;
+}
+
+.mobile-nav-links a {
+font-size: 1.5rem;
+color: var(--text-white);
+text-decoration: none;
+font-weight: 600;
+}
+
+
+/* === Main Content === */
+main {
+margin-top: 0; /* Header is sticky, so no top margin needed */
+padding: 0; /* Main content padding will be handled by inner divs */
+display: flex;
+justify-content: center;
+padding-top: 20px; /* py-5 */
+padding-bottom: 20px; /* py-5 */
+}
+
+.main-content-wrapper {
+max-width: 960px; /* max-w-[960px] */
+flex: 1; /* flex-1 */
+display: flex;
+flex-direction: column;
+}
+
+/* --- Section Heading --- */
+.section-heading-main {
+padding: 16px; /* p-4 */
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+gap: 12px; /* gap-3 */
+}
+
+.section-heading-main h2 {
+color: var(--text-white);
+letter-spacing: -0.01em; /* tracking-light from new design, but exact value not provided. Approx here. */
+font-size: 32px; /* text-[32px] */
+font-weight: 700; /* font-bold */
+line-height: 1.2; /* leading-tight */
+min-width: 288px; /* min-w-72 */
+}
+
+/* --- Category Filter Pills --- */
+.category-filters {
+display: flex;
+gap: 12px; /* gap-3 */
+padding: 12px; /* p-3 */
+flex-wrap: wrap;
+padding-right: 16px; /* pr-4 */
+}
+
+.category-pill {
+height: 32px; /* h-8 */
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px; /* gap-x-2 */
+border-radius: 8px; /* rounded-lg */
+background: var(--secondary-color); /* bg-[#214a3c] */
+padding: 0 16px; /* pl-4 pr-4 */
+cursor: pointer;
+transition: background 0.2s ease, color 0.2s ease;
+}
+
+.category-pill p {
+color: var(--text-white);
+font-size: 0.875rem; /* text-sm */
+font-weight: 500;
+line-height: normal;
+}
+
+.category-pill.active {
+background: var(--primary-color); /* Active pill color */
+color: var(--text-white);
+}
+
+.category-pill:hover:not(.active) {
+background: #2f5d4f; /* Hover for inactive */
+}
+
+/* --- Product Grid & Card --- */
+.products-grid-new { /* New class name to avoid conflict */
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); /* grid-cols-[repeat(auto-fit,minmax(158px,1fr))] */
+gap: 12px; /* gap-3 */
+padding: 16px; /* p-4 */
+}
+
+.product-card-new { /* New class name to avoid conflict */
+display: flex;
+flex-direction: column;
+gap: 12px; /* gap-3 */
+padding-bottom: 12px; /* pb-3 */
+}
+
+.product-image-new { /* New class name for image div */
+width: 100%;
+aspect-ratio: 1 / 1; /* aspect-square */
+background-position: center; /* bg-center */
+background-repeat: no-repeat; /* bg-no-repeat */
+background-size: cover; /* bg-cover */
+border-radius: 8px; /* rounded-lg */
+background-color: var(--secondary-color); /* Fallback/placeholder color */
+}
+
+.product-info-new p { /* New classes for product info */
+color: var(--text-white);
+font-size: 1rem; /* text-base */
+font-weight: 500;
+line-height: normal;
+}
+
+.product-info-new .price {
+color: var(--text-light-green); /* text-[#8ecdb7] */
+font-size: 0.875rem; /* text-sm */
+font-weight: normal;
+line-height: normal;
+}
+
+/* === Other Pages (Admin, Product, etc.) === */
+/* Re-using card for consistency, but new admin has no general "card" */
+/* Admin specific styles will be inline in admin.html for now or added below */
+
+.form-group label {
+display: block;
+margin-bottom: 0.75rem;
+font-weight: 500;
+color: var(--text-white); /* Changed to white */
+padding-bottom: 8px; /* pb-2 */
+}
+
+.form-control {
+width: 100%;
+padding: 15px; /* p-[15px] */
+background: var(--tertiary-color); /* bg-[#17352b] */
+border: 1px solid var(--border-color-new); /* border border-[#2f6a55] */
+border-radius: 8px; /* rounded-lg */
+color: var(--text-white);
+font-size: 1rem;
+transition: all 0.3s ease;
+height: 56px; /* h-14 */
+}
+
+.form-control::placeholder {
+color: var(--text-light-green); /* placeholder:text-[#8ecdb7] */
+}
+
+.form-control:focus {
+outline: none;
+border-color: var(--border-color-new); /* focus:border-[#2f6a55] */
+box-shadow: none; /* No ring-0 */
+}
+
+/* Admin Specific */
+.admin-sidebar {
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+background: var(--background-dark); /* bg-[#10231c] */
+padding: 16px; /* p-4 */
+min-height: 700px; /* min-h-[700px] */
+width: 320px; /* w-80 */
+border-right: 1px solid var(--border-color-new); /* Add border for separation */
+}
+
+.admin-sidebar-nav-title {
+color: var(--text-white);
+font-size: 1rem;
+font-weight: 500;
+line-height: normal;
+margin-bottom: 16px; /* gap-4 for parent div */
+}
+
+.admin-nav-links {
+display: flex;
+flex-direction: column;
+gap: 8px; /* gap-2 */
+}
+
+.admin-nav-link {
+display: flex;
+align-items: center;
+gap: 12px; /* gap-3 */
+padding: 8px 12px; /* px-3 py-2 */
+border-radius: 8px; /* rounded-lg */
+transition: background 0.2s ease;
+cursor: pointer;
+color: var(--text-white);
+text-decoration: none; /* For link behavior */
+}
+
+.admin-nav-link svg {
+color: var(--text-white); /* Icon color */
+width: 24px;
+height: 24px;
+}
+
+.admin-nav-link p {
+font-size: 0.875rem;
+font-weight: 500;
+line-height: normal;
+}
+
+.admin-nav-link.active {
+background: var(--secondary-color); /* bg-[#214a3c] */
+}
+
+.admin-nav-link:hover:not(.active) {
+background: rgba(33, 74, 60, 0.5); /* Lighter secondary on hover */
+}
+
+/* Admin Main Content */
+.admin-main-content {
+flex: 1;
+max-width: 960px; /* max-w-[960px] */
+display: flex;
+flex-direction: column;
+}
+
+.admin-section-heading {
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+gap: 12px; /* gap-3 */
+padding: 16px; /* p-4 */
+}
+
+.admin-section-heading h2 {
+color: var(--text-white);
+letter-spacing: -0.01em;
+font-size: 32px;
+font-weight: 700;
+line-height: 1.2;
+min-width: 288px;
+}
+
+.admin-form-group {
+padding: 12px 16px; /* px-4 py-3 */
+}
+
+.admin-form-group.action-button {
+padding: 12px 16px; /* px-4 py-3 */
+justify-content: flex-start;
+}
+
+
+/* Admin Table */
+.admin-table-wrapper {
+overflow-x: auto; /* For responsive tables */
+border-radius: 8px; /* rounded-lg */
+border: 1px solid var(--border-color-new); /* border border-[#2f6a55] */
+background: var(--background-dark); /* bg-[#10231c] */
+margin: 12px 16px; /* Added for spacing */
+}
+
+.admin-table {
+width: 100%;
+border-collapse: collapse;
+min-width: 600px; /* To ensure horizontal scroll on small screens */
+}
+
+.admin-table thead tr {
+background: var(--tertiary-color); /* bg-[#17352b] */
+}
+
+.admin-table th, .admin-table td {
+padding: 12px 16px; /* px-4 py-3 / px-4 py-2 */
+text-align: left;
+white-space: nowrap;
+}
+
+.admin-table th {
+color: var(--text-white);
+font-size: 0.875rem;
+font-weight: 500;
+line-height: normal;
+width: 400px; /* w-[400px] as per sample, adjust if needed */
+}
+
+.admin-table tbody tr {
+border-top: 1px solid var(--border-color-new); /* border-t border-t-[#2f6a55] */
+}
+
+.admin-table td {
+height: 72px; /* h-[72px] */
+font-size: 0.875rem;
+font-weight: normal;
+line-height: normal;
+}
+
+.admin-table td.product-name {
+color: var(--text-white);
+}
+
+.admin-table td.product-price,
+.admin-table td.product-category {
+color: var(--text-light-green); /* text-[#8ecdb7] */
+}
+
+.admin-table td.product-actions {
+color: var(--text-light-green);
+font-weight: 700;
+letter-spacing: 0.015em;
+}
+
+/* Edit/Delete Actions specific styling */
+.admin-action-btn {
+background: none;
+border: none;
+color: var(--text-light-green);
+font-weight: 700;
+cursor: pointer;
+margin-right: 8px; /* Space between Edit | Delete */
+transition: color 0.2s ease;
+}
+
+.admin-action-btn:hover {
+color: var(--primary-color); /* Highlight on hover */
+}
+
+/* === Footer === */
+.footer {
+background: var(--background-dark); /* bg-[#10231c] */
+margin-top: 0; /* Remove previous margin-top */
+padding: 40px 20px; /* px-5 py-10 */
+text-align: center;
+}
+
+.footer-content-new {
+max-width: 960px; /* max-w-[960px] */
+margin: 0 auto;
+display: flex;
+flex-direction: column;
+gap: 24px; /* gap-6 */
+}
+
+.footer-links-new {
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+justify-content: center;
+gap: 24px; /* gap-6 */
+}
+
+.footer-links-new a {
+color: var(--text-light-green); /* text-[#8ecdb7] */
+text-decoration: none;
+font-size: 1rem;
+font-weight: normal;
+line-height: normal;
+min-width: 160px; /* min-w-40 */
+}
+
+.footer-links-new a:hover {
+color: var(--text-white); /* Hover effect */
+}
+
+.footer-bottom p {
+color: var(--text-light-green); /* text-[#8ecdb7] */
+font-size: 1rem;
+font-weight: normal;
+line-height: normal;
+margin-top: 0; /* No specific margin-top from new design */
+}
+
+/* --- Responsive Design (Media Queries) --- */
+@media (max-width: 992px) {
+/* Header */
+nav {
+    padding: 0 24px; /* Adjusted padding for smaller screens */
+}
+.nav-links {
+    display: none; /* Hide desktop nav links on smaller screens */
+}
+.header-right {
+    gap: 16px; /* Reduce gap */
+}
+.search-label {
+    min-width: unset; /* Allow search to shrink more */
+    max-width: 200px;
+}
+.header-buttons {
+    gap: 4px;
+}
+.btn {
+    padding: 0 12px;
+}
+.hamburger {
+    display: flex; /* Show hamburger menu */
+}
+
+/* Main Content Wrapper */
+.main-content-wrapper {
+    padding: 0 16px; /* Add some side padding */
+}
+
+/* Category Filters */
+.category-filters {
+    justify-content: center; /* Center pills on smaller screens */
+    padding-right: 12px;
+}
+
+/* Product Grid */
+.products-grid-new {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Slightly smaller product cards */
+    gap: 10px;
+}
+
+/* Admin Panel */
+.layout-container-admin {
+    flex-direction: column; /* Stack sidebar and main content */
+}
+.admin-sidebar {
+    width: 100%; /* Full width on mobile */
+    min-height: unset; /* Remove min-height */
+    height: auto; /* Auto height */
+    border-right: none;
+    border-bottom: 1px solid var(--border-color-new); /* Add border to bottom */
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+/* Hide sidebar nav by default on mobile, show on toggle */
+.admin-nav-wrapper {
+    display: none;
+    flex-direction: column;
+}
+.admin-sidebar.expanded .admin-nav-wrapper {
+    display: flex; /* Show when expanded */
+}
+.admin-sidebar-toggle-btn { /* New button to toggle sidebar on mobile */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 0;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: var(--text-white);
+    font-size: 1rem;
+    font-weight: 600;
+}
+.admin-sidebar-toggle-btn svg {
+    transition: transform 0.3s ease;
+}
+.admin-sidebar.expanded .admin-sidebar-toggle-btn svg {
+    transform: rotate(180deg);
+}
+
+
+.admin-main-content {
+    max-width: 100%; /* Full width */
+}
+.admin-table-wrapper {
+    margin: 12px; /* Adjust margin */
+}
+.admin-table th, .admin-table td {
+    width: unset; /* Let content dictate width, allow horizontal scroll */
+}
+
+/* Footer */
+.footer-links-new {
+    flex-direction: column; /* Stack footer links */
+    gap: 12px;
+}
+.footer-links-new a {
+    min-width: unset; /* Remove min-width for stacking */
+}
+}
+
+@media (max-width: 768px) {
+/* Header */
+nav {
+    height: 56px; /* Smaller header on very small screens */
+}
+.logo {
+    font-size: 1.5rem;
+    gap: 10px;
+}
+.logo svg {
+    width: 20px;
+    height: 20px;
+}
+.header-right {
+    gap: 10px;
+}
+.search-label {
+    min-width: 120px; /* Further shrink search */
+}
+.btn {
+    padding: 0 8px; /* Smaller button padding */
+    font-size: 0.75rem; /* Smaller font */
+    height: 36px; /* Smaller height */
+}
+
+/* Main Content */
+.main-content-wrapper {
+    padding: 0 8px;
+}
+.section-heading-main h2 {
+    font-size: 28px;
+    min-width: unset;
+    text-align: center;
+    width: 100%;
+}
+.category-filters {
+    padding: 8px;
+    justify-content: center;
+}
+.category-pill {
+    height: 28px;
+    padding: 0 12px;
+    font-size: 0.75rem;
+}
+.products-grid-new {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Even smaller cards */
+    padding: 8px;
+}
+.product-info-new p {
+    font-size: 0.9rem;
+}
+.product-info-new .price {
+    font-size: 0.75rem;
+}
+
+/* Admin Panel */
+.admin-main-content {
+    padding-top: 10px; /* Reduced top padding */
+}
+.admin-form-group {
+    padding: 8px 12px; /* Smaller padding */
+}
+.form-control {
+    height: 48px; /* Smaller input height */
+    padding: 12px;
+}
+.admin-table-wrapper {
+    margin: 8px;
+}
+.admin-table th, .admin-table td {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+}
+.admin-table td {
+    height: 60px;
+}
+.admin-action-btn {
+    font-size: 0.8rem;
+}
+
+/* Footer */
+.footer {
+    padding: 30px 15px;
+}
+.footer-links-new {
+    gap: 8px;
+}
+.footer-links-new a, .footer-bottom p {
+    font-size: 0.85rem;
+}
+}

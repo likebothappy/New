@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - CodeCraft</title>
+    <meta name="description" content="Terms of Service and conditions for using CodeCraft platform and purchasing source code.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Fonts are imported in style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Legal Pages Specific Styles (from original, adjusted for new theme) */
+        main {
+            padding: 2rem 0; /* Adjust padding for main content */
+            display: flex; /* For centering card */
+            justify-content: center;
+        }
+        .legal-card { /* Renamed from .card for clarity on these pages */
+            background: var(--secondary-color); /* Matches new theme */
+            border-radius: 12px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color-new);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .legal-content .text-center h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-white);
+        }
+        .legal-content .text-center p {
+            color: var(--text-light-green); /* Changed to new secondary text color */
+        }
+        .legal-content h2 {
+            font-size: 1.5rem;
+            color: var(--text-white);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color-new); /* Matches new theme */
+        }
+        .legal-content p, .legal-content li {
+            color: var(--text-light-green); /* Matches new theme */
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .legal-content ul {
+            list-style-position: inside;
+            padding-left: 1rem;
+            display: grid;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .footer-legal { /* Specific footer style for legal pages to be minimal */
+            background: var(--background-dark);
+            border-top: 1px solid var(--border-color-new);
+            margin-top: 3rem;
+            padding: 2rem 24px;
+            text-align: center;
+            color: var(--text-light-green);
+        }
+        .footer-legal .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+        .footer-legal .footer-links a {
+            color: var(--text-light-green);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-legal .footer-links a:hover {
+            color: var(--text-white);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .legal-card {
+                padding: 1.5rem;
+            }
+            .legal-content .text-center h1 { font-size: 2rem; }
+            .legal-content h2 { font-size: 1.25rem; }
+            .legal-content p, .legal-content li { font-size: 0.95rem; }
+            .footer-legal .footer-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            /* Header adjustment for very small mobile */
+            header nav.container {
+                padding: 0 16px;
+                height: 56px; /* Smaller header on very small screens */
+            }
+            header .logo {
+                font-size: 1.5rem;
+                gap: 10px;
+            }
+            header .logo svg {
+                width: 20px;
+                height: 20px;
+            }
+            header .header-right {
+                gap: 10px;
+            }
+            header .btn {
+                padding: 0 8px;
+                font-size: 0.75rem;
+                height: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (New Design) -->
+    <header>
+        <nav class="container">
+            <div class="flex items-center gap-8">
+                <a href="index.html" class="logo">
+                    <!-- New Logo SVG (from your provided code) -->
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z"
+                            fill="currentColor"
+                        ></path>
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z"
+                            fill="currentColor"
+                        ></path>
+                    </svg>
+                    Code<span>Craft</span>
+                </a>
+                <!-- Desktop Navigation -->
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="terms.html">Terms</a></li>
+                    <li><a href="privacy.html">Privacy</a></li>
+                    <li><a href="admin.html">Admin</a></li>
+                </ul>
+            </div>
+            <div class="header-right">
+                <!-- Search Bar (Hidden on legal pages) -->
+                <label class="search-label" style="display: none;">
+                    <div class="search-input-wrapper">
+                        <div class="search-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                            </svg>
+                        </div>
+                        <input placeholder="Search" class="search-input" type="text" value="" />
+                    </div>
+                </label>
+                <!-- Buttons -->
+                <div class="header-buttons">
+                    <button class="btn btn-primary">
+                        <span class="truncate">Submit</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='admin.html'">
+                        <span class="truncate">Sign In</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Hamburger -->
+            <button class="hamburger" id="hamburger-terms">
+                <span class="line line-1"></span>
+                <span class="line line-2"></span>
+                <span class="line line-3"></span>
+            </button>
+        </nav>
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav" id="mobile-nav-terms">
+            <ul class="mobile-nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Submit</button></li>
+                <li><button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" onclick="window.location.href='admin.html'">Sign In</button></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="container">
+            <div class="legal-card">
+                <div class="text-center" style="margin-bottom: 2rem;">
+                    <h1>Terms of Service</h1>
+                    <p>
+                        <strong>Last updated:</strong> January 2024
+                    </p>
+                </div>
+
+                <div class="legal-content">
+                    <h2>1. Acceptance of Terms</h2>
+                    <p>By accessing and using CodeCraft ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
+
+                    <h2>2. Description of Service</h2>
+                    <p>CodeCraft is a digital marketplace that provides premium source code solutions for developers and businesses. We offer high-quality, well-documented source code that can be purchased and downloaded instantly after payment.</p>
+
+                    <h2>3. Purchase and Payment Terms</h2>
+                    <ul>
+                        <li>All payments are processed securely through Razorpay payment gateway.</li>
+                        <li>Prices are displayed in Indian Rupees (INR) and include all applicable taxes.</li>
+                        <li>Payment must be completed before accessing download links.</li>
+                        <li>We reserve the right to change prices at any time without notice.</li>
+                        <li>All sales are final - no refunds will be provided except as required by law.</li>
+                    </ul>
+
+                    <h2>4. License and Usage Rights</h2>
+                    <ul>
+                        <li>You receive a commercial license to use the purchased source code.</li>
+                        <li>You may modify, customize, and use the code in your commercial projects.</li>
+                        <li>You may not resell, redistribute, or share the original source code.</li>
+                        <li>You may not claim ownership of the original source code.</li>
+                    </ul>
+
+                    <h2>5. Disclaimer of Warranties</h2>
+                    <p>The service and source code are provided on an "as is" basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+
+                    <h2>6. Limitation of Liability</h2>
+                    <p>In no event shall CodeCraft or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on CodeCraft's website.</p>
+
+                    <h2>7. Changes to Terms</h2>
+                    <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days notice prior to any new terms taking effect.</p>
+
+                    <h2>8. Contact Information</h2>
+                    <p>If you have any questions about these Terms of Service, please contact us through our website's primary contact method.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer (New Design) -->
+    <footer class="footer-legal">
+        <div class="footer-links">
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </div>
+        <p>© 2024 CodeCraft. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Hamburger Menu Logic (for legal pages)
+        const hamburgerTerms = document.getElementById('hamburger-terms');
+        const mobileNavTerms = document.getElementById('mobile-nav-terms');
+        hamburgerTerms.addEventListener('click', () => {
+            hamburgerTerms.classList.toggle('active');
+            mobileNavTerms.classList.toggle('active');
+        });
+        document.querySelectorAll('#mobile-nav-terms a, #mobile-nav-terms button').forEach(el => {
+            el.addEventListener('click', () => {
+                hamburgerTerms.classList.remove('active');
+                mobileNavTerms.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

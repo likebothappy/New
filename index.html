@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeCraft - Explore Digital Products</title>
+    <meta name="description" content="Explore high-quality digital products and source code for modern developers on CodeCraft.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Fonts are imported in style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- REMOVED Tailwind CSS script, all styling will be from style.css -->
+</head>
+<body>
+    <div class="relative flex size-full min-h-screen flex-col bg-[var(--background-dark)] group/design-root overflow-x-hidden" style='font-family: var(--font-family);'>
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- Header (New Design) -->
+            <header>
+                <nav class="container">
+                    <div class="flex items-center gap-8">
+                        <a href="index.html" class="logo">
+                            <!-- New Logo SVG (from your provided code) -->
+                            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z"
+                                    fill="currentColor"
+                                ></path>
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z"
+                                    fill="currentColor"
+                                ></path>
+                            </svg>
+                            Code<span>Craft</span>
+                        </a>
+                        <!-- Desktop Navigation -->
+                        <ul class="nav-links">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="#products">Categories</a></li> <!-- Changed to Categories as per new design -->
+                            <li><a href="#new">New</a></li>
+                            <li><a href="#trending">Trending</a></li>
+                            <li><a href="admin.html">Admin</a></li> <!-- Added Admin link -->
+                        </ul>
+                    </div>
+                    <div class="header-right">
+                        <!-- Search Bar -->
+                        <label class="search-label">
+                            <div class="search-input-wrapper">
+                                <div class="search-icon-wrapper">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                        <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                                    </svg>
+                                </div>
+                                <input id="product-search-input" placeholder="Search" class="search-input" type="text" value="" />
+                            </div>
+                        </label>
+                        <!-- Buttons -->
+                        <div class="header-buttons">
+                            <button class="btn btn-primary">
+                                <span class="truncate">Submit</span>
+                            </button>
+                            <button class="btn btn-secondary" onclick="window.location.href='admin.html'">
+                                <span class="truncate">Sign In</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Mobile Hamburger -->
+                    <button class="hamburger" id="hamburger">
+                        <span class="line line-1"></span>
+                        <span class="line line-2"></span>
+                        <span class="line line-3"></span>
+                    </button>
+                </nav>
+                <!-- Mobile Navigation -->
+                <div class="mobile-nav" id="mobile-nav">
+                    <ul class="mobile-nav-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#products">Categories</a></li>
+                        <li><a href="#new">New</a></li>
+                        <li><a href="#trending">Trending</a></li>
+                        <li><a href="admin.html">Admin</a></li>
+                        <li><button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Submit</button></li>
+                        <li><button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" onclick="window.location.href='admin.html'">Sign In</button></li>
+                    </ul>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main>
+                <div class="main-content-wrapper">
+                    <div class="section-heading-main">
+                        <h2>Explore Digital Products</h2>
+                    </div>
+                    
+                    <!-- Category Filters -->
+                    <div class="category-filters" id="category-filters">
+                        <div class="category-pill active" data-category="All"><p>All</p></div>
+                        <div class="category-pill" data-category="APIs"><p>APIs</p></div>
+                        <div class="category-pill" data-category="Bots"><p>Bots</p></div>
+                        <div class="category-pill" data-category="Scripts"><p>Scripts</p></div>
+                        <div class="category-pill" data-category="Templates"><p>Templates</p></div>
+                        <!-- Add more categories as needed by admin -->
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div id="products-container" class="products-grid-new">
+                        <!-- Products will be loaded here dynamically by JavaScript -->
+                        <!-- Loading State (Skeletons) -->
+                        <div class="product-card-new skeleton">
+                            <div class="product-image-new skeleton-image"></div>
+                            <div class="product-info-new">
+                                <p class="skeleton-title"></p>
+                                <p class="skeleton-text"></p>
+                            </div>
+                        </div>
+                        <div class="product-card-new skeleton">
+                            <div class="product-image-new skeleton-image"></div>
+                            <div class="product-info-new">
+                                <p class="skeleton-title"></p>
+                                <p class="skeleton-text"></p>
+                            </div>
+                        </div>
+                        <div class="product-card-new skeleton">
+                            <div class="product-image-new skeleton-image"></div>
+                            <div class="product-info-new">
+                                <p class="skeleton-title"></p>
+                                <p class="skeleton-text"></p>
+                            </div>
+                        </div>
+                         <div class="product-card-new skeleton">
+                            <div class="product-image-new skeleton-image"></div>
+                            <div class="product-info-new">
+                                <p class="skeleton-title"></p>
+                                <p class="skeleton-text"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- No Products Message -->
+                    <div id="no-products" style="display: none; text-align: center; padding: 3rem;">
+                        <i class="fas fa-box-open" style="font-size: 3rem; color: var(--text-light-green); margin-bottom: 1rem;"></i>
+                        <h3 style="color: var(--text-white); margin-bottom: 1rem;">No Products Available</h3>
+                        <p style="color: var(--text-light-green);">Products will appear here once they are added by the admin.</p>
+                        <a href="admin.html" class="btn btn-primary" style="margin-top: 1rem;">
+                            <i class="fas fa-plus"></i> Add Products
+                        </a>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer (New Design) -->
+            <footer class="footer">
+                <div class="footer-content-new">
+                    <div class="footer-links-new">
+                        <a href="#">About</a>
+                        <a href="#">Contact</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="privacy.html">Privacy Policy</a>
+                    </div>
+                    <p class="footer-bottom-text">@2024 CodeCraft. All rights reserved.</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module">
+        import { productService, utils } from './js/firebase-config.js';
+
+        // DOM Elements
+        const productsContainer = document.getElementById('products-container');
+        const noProductsDiv = document.getElementById('no-products');
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobile-nav');
+        const categoryFilters = document.getElementById('category-filters');
+        const productSearchInput = document.getElementById('product-search-input');
+
+        let allProducts = []; // To store all products for filtering
+
+        // Mobile Navigation Toggle
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+        });
+
+        // Close mobile nav when clicking on links
+        document.querySelectorAll('.mobile-nav-links a, .mobile-nav-links button').forEach(link => { // Added button for mobile menu buttons
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileNav.classList.remove('active');
+            });
+        });
+
+        // Category Filter Logic
+        let activeCategory = 'All'; // Default active category
+
+        categoryFilters.addEventListener('click', (e) => {
+            const targetPill = e.target.closest('.category-pill');
+            if (targetPill) {
+                // Remove active class from all pills
+                document.querySelectorAll('.category-pill').forEach(pill => {
+                    pill.classList.remove('active');
+                });
+                // Add active class to clicked pill
+                targetPill.classList.add('active');
+                activeCategory = targetPill.dataset.category;
+                filterAndDisplayProducts();
+            }
+        });
+
+        // Search Input Logic
+        productSearchInput.addEventListener('input', () => {
+            filterAndDisplayProducts();
+        });
+
+        // Load and display products
+        async function loadProducts() {
+            try {
+                showLoadingSkeletons();
+                
+                // Add small delay for better UX (so skeletons are visible)
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                const result = await productService.getProducts();
+                
+                if (result.success && result.products && result.products.length > 0) {
+                    allProducts = result.products; // Store all products
+                    filterAndDisplayProducts(); // Initial display after loading
+                    console.log('Loaded products:', allProducts.length);
+                } else {
+                    showNoProducts();
+                    console.log('No products found');
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                showNoProducts();
+            }
+        }
+
+        // Filter and Display Products
+        function filterAndDisplayProducts() {
+            const searchTerm = productSearchInput.value.toLowerCase();
+            
+            const filteredProducts = allProducts.filter(product => {
+                // Ensure product.category exists and is a string before calling toLowerCase
+                const productCategory = typeof product.category === 'string' ? product.category.toLowerCase() : '';
+                
+                const matchesCategory = (activeCategory === 'All' || 
+                                         productCategory === activeCategory.toLowerCase());
+                
+                // Ensure product.title and product.description exist and are strings
+                const productTitle = typeof product.title === 'string' ? product.title.toLowerCase() : '';
+                const productDescription = typeof product.description === 'string' ? product.description.toLowerCase() : '';
+
+                const matchesSearch = productTitle.includes(searchTerm) ||
+                                      productDescription.includes(searchTerm);
+                
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredProducts.length > 0) {
+                displayProducts(filteredProducts);
+                noProductsDiv.style.display = 'none';
+                productsContainer.style.display = 'grid';
+            } else {
+                productsContainer.innerHTML = ''; // Clear existing products
+                noProductsDiv.style.display = 'block';
+                productsContainer.style.display = 'none';
+            }
+        }
+
+        // Display products with proper View Details links
+        function displayProducts(products) {
+            productsContainer.innerHTML = ''; // Clear existing skeletons/products
+            
+            products.forEach((product, index) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card-new fade-in-up';
+                productCard.style.animationDelay = `${index * 0.05}s`; // Faster fade-in
+
+                // Use imageUrl from Firebase, with a fallback placeholder
+                const imageUrl = product.imageUrl || product.image || 'https://via.placeholder.com/400x400/214A3C/8ECDB7?text=No+Image';
+                const title = product.title || product.name || 'Untitled Product';
+                const price = product.price || 0; // Default to 0 if price is not set
+                
+                productCard.innerHTML = `
+                    <div class="product-image-new" style="background-image: url('${imageUrl}');">
+                    </div>
+                    <div class="product-info-new">
+                        <p>${title}</p>
+                        <p class="price">${utils.formatCurrency(price)}</p>
+                    </div>
+                `;
+                
+                // Add click listener to whole card for navigation
+                productCard.addEventListener('click', () => viewProductDetails(product.id));
+
+                productsContainer.appendChild(productCard);
+            });
+        }
+
+        // View Details function (unchanged)
+        window.viewProductDetails = function(productId) {
+            if (!productId) {
+                console.error('Product ID is missing');
+                return;
+            }
+            console.log('Navigating to product:', productId);
+            window.location.href = `product.html?id=${productId}`;
+        }
+
+        // Show loading state (skeletons)
+        function showLoadingSkeletons() {
+            const skeletonHtml = `
+                <div class="product-card-new skeleton">
+                    <div class="product-image-new skeleton-image"></div>
+                    <div class="product-info-new">
+                        <p class="skeleton-title"></p>
+                        <p class="skeleton-text"></p>
+                    </div>
+                </div>
+            `.repeat(4); // Display 4 skeleton cards
+            productsContainer.innerHTML = skeletonHtml;
+            productsContainer.style.display = 'grid';
+            noProductsDiv.style.display = 'none';
+        }
+
+        // Show no products state
+        function showNoProducts() {
+            productsContainer.innerHTML = '';
+            productsContainer.style.display = 'none';
+            noProductsDiv.style.display = 'block';
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Homepage loaded, initializing...');
+            loadProducts();
+            
+            // Add fade-in animation to elements
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-up-active'); // Add a class to trigger animation
+                        observer.unobserve(entry.target); // Stop observing after animation
+                    }
+                });
+            }, { threshold: 0.1 }); // Trigger when 10% of element is visible
+            
+            // Observe products container children for fade-in
+            // This needs to be called AFTER products are loaded if they are dynamic.
+            // For initial skeletons, they can be observed directly.
+            // For dynamically loaded products, you might re-observe or add class when adding to DOM.
+            // The `displayProducts` function now adds `fade-in-up` class directly, so just ensure observer handles them.
+            // A more robust way for dynamic content is to observe when content is added.
+            // For now, skeletons will fade in. Real products get the class too.
+            const initialElementsToObserve = document.querySelectorAll('.product-card-new');
+            initialElementsToObserve.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>

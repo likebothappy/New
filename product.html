@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - CodeCraft</title>
+    <meta name="description" content="Detailed information about a digital product available on CodeCraft.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Fonts are imported in style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Razorpay Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        /* Product Page Specific Overrides/Adjustments */
+        .product-container {
+            max-width: 1200px; /* Consistent with previous design, adjust if needed */
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .product-image-section {
+            position: sticky;
+            top: 90px; /* Adjusted to account for new header height (approx 64px + some spacing) */
+            height: fit-content;
+        }
+
+        .product-main-image {
+            width: 100%;
+            max-width: 500px; /* Original max-width */
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            transition: transform 0.3s ease;
+            display: block;
+        }
+
+        .product-main-image:hover {
+            transform: scale(1.02);
+        }
+
+        .product-details-section {
+            padding-top: 1rem;
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-light-green); /* Changed to new accent color */
+            margin-bottom: 2rem;
+        }
+
+        .product-description, .product-features {
+            margin-bottom: 2.5rem;
+        }
+
+        .product-description h3, .product-features h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 1rem;
+        }
+
+        .product-description p {
+            color: var(--text-light-green); /* Changed to new secondary text color */
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .product-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-features li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--text-light-green); /* Changed to new secondary text color */
+            font-size: 1rem;
+        }
+
+        .product-features li i {
+            color: var(--primary-color); /* Changed to new primary accent color */
+            margin-right: 1rem;
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
+        .purchase-section {
+            margin: 2rem 0;
+        }
+        
+        /* Trust Badges on Product Page - Re-using card from original */
+        .trust-badges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            background: var(--secondary-color); /* Matches new theme */
+            border-radius: 12px;
+            border: 1px solid var(--border-color-new);
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        .badge i {
+            font-size: 1.5rem;
+            color: var(--primary-color); /* Matches new theme */
+            margin-right: 1.5rem;
+        }
+
+        .badge h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 0.5rem;
+        }
+
+        .badge p {
+            font-size: 0.875rem;
+            color: var(--text-light-green);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Loading & Not Found States */
+        .loading-container, .not-found-container {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-light-green);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color-new);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .not-found-content h2 {
+            font-size: 2rem;
+            color: var(--text-white);
+            margin-bottom: 1rem;
+        }
+
+        .not-found-content p {
+            color: var(--text-light-green);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Success Modal Styles (from original code, updated for new theme) */
+        @keyframes fillBar {
+            to { width: 100%; }
+        }
+        #success-modal {
+            display: none; /* Default hidden */
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none; /* Allow clicks through when hidden */
+        }
+        #success-modal.show {
+            display: flex; /* Show when active */
+            opacity: 1;
+            pointer-events: all;
+        }
+        #success-modal > div {
+            background: var(--secondary-color); /* Matches new theme */
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid var(--border-color-new);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        #success-modal.show > div {
+            transform: translateY(0);
+        }
+
+        #success-modal i.fas.fa-check-circle {
+            font-size: 3rem;
+            color: var(--primary-color); /* Matches new theme */
+            margin-bottom: 1rem;
+        }
+        #success-modal h2 {
+            color: var(--text-white);
+            margin-bottom: 1rem;
+        }
+        #success-modal p {
+            color: var(--text-light-green);
+            margin-bottom: 1rem;
+        }
+        #success-modal .progress-bar-wrapper {
+            width: 100%; height: 4px;
+            background: var(--tertiary-color);
+            border-radius: 2px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        #success-modal .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+            width: 0%;
+            animation: fillBar 3s ease forwards;
+        }
+        #success-modal p strong {
+            color: var(--text-white);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .product-layout {
+                grid-template-columns: 1fr; /* Stack on smaller screens */
+                gap: 2rem;
+            }
+            .product-image-section {
+                position: relative; /* Remove sticky on mobile */
+                top: unset;
+            }
+            .product-main-image {
+                max-width: 100%; /* Full width */
+            }
+        }
+        @media (max-width: 768px) {
+            .product-container {
+                padding: 1rem;
+            }
+            .product-title {
+                font-size: 2rem;
+            }
+            .product-price {
+                font-size: 1.5rem;
+            }
+            .product-description h3, .product-features h3 {
+                font-size: 1.1rem;
+            }
+            .product-description p, .product-features li {
+                font-size: 0.9rem;
+            }
+            .trust-badges {
+                grid-template-columns: 1fr; /* Stack badges */
+                gap: 1.5rem;
+                margin-top: 2.5rem;
+            }
+            .badge {
+                padding: 1.5rem;
+            }
+            /* Adjust header on mobile */
+            .nav-container {
+                padding: 0 16px;
+                height: 56px;
+            }
+            .nav-brand {
+                font-size: 1.5rem;
+                gap: 10px;
+            }
+            .nav-brand svg {
+                width: 20px;
+                height: 20px;
+            }
+            .header-right {
+                gap: 10px;
+            }
+            .btn {
+                padding: 0 8px;
+                font-size: 0.75rem;
+                height: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (New Design) -->
+    <header>
+        <nav class="container">
+            <div class="flex items-center gap-8">
+                <a href="index.html" class="logo">
+                    <!-- New Logo SVG (from your provided code) -->
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z"
+                            fill="currentColor"
+                        ></path>
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z"
+                            fill="currentColor"
+                        ></path>
+                    </svg>
+                    Code<span>Craft</span>
+                </a>
+                <!-- Desktop Navigation -->
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#products">Categories</a></li>
+                    <li><a href="admin.html">Admin</a></li>
+                </ul>
+            </div>
+            <div class="header-right">
+                <!-- Search Bar (Hidden on product page as per original, but kept for consistency) -->
+                <label class="search-label" style="display: none;">
+                    <div class="search-input-wrapper">
+                        <div class="search-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                            </svg>
+                        </div>
+                        <input id="product-search-input-product-page" placeholder="Search" class="search-input" type="text" value="" />
+                    </div>
+                </label>
+                <!-- Buttons -->
+                <div class="header-buttons">
+                    <button class="btn btn-primary">
+                        <span class="truncate">Submit</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='admin.html'">
+                        <span class="truncate">Sign In</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Hamburger -->
+            <button class="hamburger" id="hamburger-product-page">
+                <span class="line line-1"></span>
+                <span class="line line-2"></span>
+                <span class="line line-3"></span>
+            </button>
+        </nav>
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav" id="mobile-nav-product-page">
+            <ul class="mobile-nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#products">Categories</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Submit</button></li>
+                <li><button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" onclick="window.location.href='admin.html'">Sign In</button></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Success Modal -->
+    <div id="success-modal">
+        <div>
+            <i class="fas fa-check-circle"></i>
+            <h2>Payment Successful! 🎉</h2>
+            <p id="success-message"></p>
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar-fill"></div>
+            </div>
+            <p style="color: var(--primary-color); font-weight: 600;">Redirecting to download...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Loading State -->
+        <div id="loading" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Loading product details...</p>
+        </div>
+
+        <!-- Not Found State -->
+        <div id="not-found" class="not-found-container" style="display: none;">
+            <div class="not-found-content">
+                <h2>Product Not Found</h2>
+                <p>The product you're looking for doesn't exist or has been removed.</p>
+                <a href="index.html" class="btn btn-secondary">Back to Home</a>
+            </div>
+        </div>
+
+        <!-- Product Container -->
+        <div id="product-container" class="product-container" style="display: none;">
+            <div class="product-layout">
+                <!-- Product Image -->
+                <div class="product-image-section">
+                    <img id="product-image" src="" alt="Product Image" class="product-main-image">
+                </div>
+
+                <!-- Product Details -->
+                <div class="product-details-section">
+                    <h1 id="product-title" class="product-title"></h1>
+                    <p id="product-price" class="product-price"></p>
+                    
+                    <div class="product-description">
+                        <h3>Description</h3>
+                        <p id="product-description"></p>
+                    </div>
+
+                    <div class="product-features">
+                        <h3>What You Get</h3>
+                        <ul>
+                            <li><i class="fas fa-code"></i> Complete source code</li>
+                            <li><i class="fas fa-file-alt"></i> Documentation and setup guide</li>
+                            <li><i class="fas fa-download"></i> Instant download after payment</li>
+                            <li><i class="fas fa-certificate"></i> Commercial usage rights</li>
+                        </ul>
+                    </div>
+
+                    <div class="purchase-section">
+                        <button id="buy-now-btn" class="btn btn-primary btn-large">
+                            <i class="fas fa-shopping-cart"></i> Buy Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="trust-badges">
+                <div class="badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <h4>Secure Payment</h4>
+                        <p>Powered by Razorpay, India's most trusted payment gateway.</p>
+                    </div>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-bolt"></i>
+                    <div>
+                        <h4>Instant Download</h4>
+                        <p>Get immediate access to your purchase after payment.</p>
+                    </div>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-briefcase"></i>
+                    <div>
+                        <h4>Commercial License</h4>
+                        <p>Use the code in your commercial projects without restrictions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (New Design) -->
+    <footer class="footer">
+        <div class="footer-content-new">
+            <div class="footer-links-new">
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+            <p class="footer-bottom-text">@2024 CodeCraft. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script type="module">
+        import { productService, utils } from './js/firebase-config.js';
+
+        // DOM Elements
+        const loadingDiv = document.getElementById('loading');
+        const notFoundDiv = document.getElementById('not-found');
+        const productContainer = document.getElementById('product-container');
+        const productImage = document.getElementById('product-image');
+        const productTitle = document.getElementById('product-title');
+        const productPrice = document.getElementById('product-price');
+        const productDescription = document.getElementById('product-description');
+        const buyNowBtn = document.getElementById('buy-now-btn');
+
+        // Success modal elements
+        const successModal = document.getElementById('success-modal');
+        const successMessage = document.getElementById('success-message');
+
+        // Hamburger Menu Logic (for product.html)
+        const hamburgerProductPage = document.getElementById('hamburger-product-page');
+        const mobileNavProductPage = document.getElementById('mobile-nav-product-page');
+        hamburgerProductPage.addEventListener('click', () => {
+            hamburgerProductPage.classList.toggle('active');
+            mobileNavProductPage.classList.toggle('active');
+        });
+        document.querySelectorAll('#mobile-nav-product-page a, #mobile-nav-product-page button').forEach(el => {
+            el.addEventListener('click', () => {
+                hamburgerProductPage.classList.remove('active');
+                mobileNavProductPage.classList.remove('active');
+            });
+        });
+
+
+        // Current product storage
+        let currentProduct = null;
+
+        // Get product ID from URL
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Load product details
+        async function loadProductDetails() {
+            const productId = getProductIdFromUrl();
+            
+            if (!productId) {
+                showNotFound();
+                return;
+            }
+
+            try {
+                showLoading();
+                const result = await productService.getProduct(productId);
+                
+                if (result.success && result.product) {
+                    currentProduct = result.product;
+                    displayProduct(result.product);
+                } else {
+                    showNotFound();
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showNotFound();
+            }
+        }
+
+        // Display product details
+        function displayProduct(product) {
+            hideLoading();
+            
+            // Update page title
+            document.title = `${product.title || product.name} - CodeCraft`;
+            
+            // Display product image
+            if (product.imageUrl || product.image) {
+                productImage.src = product.imageUrl || product.image;
+                productImage.alt = product.title || product.name;
+                productImage.style.display = 'block';
+                
+                productImage.onerror = function() {
+                    // Fallback if image fails to load
+                    this.src = 'https://via.placeholder.com/500x400/214A3C/8ECDB7?text=Image+Not+Available';
+                };
+            } else {
+                productImage.src = 'https://via.placeholder.com/500x400/214A3C/8ECDB7?text=No+Image';
+            }
+            
+            // Display other details
+            productTitle.textContent = product.title || product.name || 'Untitled Product';
+            productPrice.textContent = utils.formatCurrency(product.price || 0); // Ensure price is formatted in INR
+            productDescription.textContent = product.description || 'No description available.';
+            
+            // Setup buy button
+            if (buyNowBtn) {
+                buyNowBtn.onclick = () => buyNow(product);
+            }
+            
+            productContainer.style.display = 'block';
+            console.log('Product displayed:', product);
+        }
+
+        // Razorpay Function
+        function buyNow(product) {
+            if (!window.Razorpay) {
+                alert('Payment gateway not available. Please refresh the page.');
+                return;
+            }
+
+            const options = {
+                key: 'rzp_test_lkoFfNbWaRVyLf', // Your test key (replace with LIVE key for production)
+                amount: (product.price || 70) * 100, // Amount in paise, default to 70 if not set
+                currency: 'INR',
+                name: 'CodeCraft',
+                description: product.title || product.name,
+                image: 'https://cdn-icons-png.flaticon.com/512/1006/1006555.png', // Placeholder logo, change if you have a custom one
+                
+                handler: function(response) {
+                    console.log('Payment Success:', response);
+                    
+                    // Store payment data in localStorage
+                    const paymentData = {
+                        payment_id: response.razorpay_payment_id,
+                        order_id: response.razorpay_order_id,
+                        signature: response.razorpay_signature,
+                        product_id: product.id,
+                        product_title: product.title || product.name,
+                        amount: product.price,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('payment_' + response.razorpay_payment_id, JSON.stringify(paymentData));
+                    
+                    // Show success modal
+                    successMessage.innerHTML = `
+                        Payment ID: <strong>${response.razorpay_payment_id}</strong><br>
+                        Product: <strong>${paymentData.product_title}</strong>
+                    `;
+                    
+                    successModal.classList.add('show');
+                    
+                    // Redirect to download page after a delay
+                    setTimeout(() => {
+                        window.location.href = `download.html?payment_id=${response.razorpay_payment_id}&product_id=${product.id}`;
+                    }, 3000);
+                },
+                
+                prefill: {
+                    name: 'Customer', // You might want to collect real user data here
+                    email: 'customer@example.com',
+                    contact: '9999999999'
+                },
+                
+                notes: {
+                    product_id: product.id,
+                    product_name: product.title || product.name,
+                    website: 'CodeCraft'
+                },
+                
+                theme: {
+                    color: '#019863' // New primary color from style.css
+                },
+                
+                modal: {
+                    ondismiss: function() {
+                        console.log('Payment cancelled by user');
+                    }
+                }
+            };
+
+            try {
+                const rzp = new Razorpay(options);
+                
+                rzp.on('payment.failed', function(response) {
+                    console.error('Payment failed:', response);
+                    
+                    let errorMessage = 'Payment failed. Please try again.';
+                    
+                    if (response.error) {
+                        const error = response.error;
+                        
+                        switch(error.code) {
+                            case 'PAYMENT_CANCELLED':
+                                errorMessage = 'Payment was cancelled.';
+                                break;
+                            case 'PAYMENT_TIMED_OUT':
+                                errorMessage = 'Payment timed out. Please try again.';
+                                break;
+                            case 'AUTHENTICATION_FAILED':
+                                errorMessage = 'Authentication failed. Please check your details.';
+                                break;
+                            case 'BAD_REQUEST_ERROR':
+                            case 'INVALID_ARGUMENT_ERROR':
+                                errorMessage = 'Invalid payment details provided. Please check and try again.';
+                                break;
+                            case 'PAYMENT_CAPTURED':
+                                errorMessage = 'Payment already captured.'; // Should not happen often for first attempt
+                                break;
+                            case 'GATEWAY_ERROR':
+                                errorMessage = 'Payment gateway error. Please try again in sometime.';
+                                break;
+                            case 'NETWORK_ERROR':
+                                errorMessage = 'Network error. Please check your internet connection.';
+                                break;
+                            case 'TRANSACTION_REJECTED':
+                                errorMessage = 'Your transaction was rejected by the bank. Please try another method.';
+                                break;
+                            default:
+                                errorMessage = error.description || 'Payment failed due to an unexpected issue.';
+                        }
+                    }
+                    
+                    alert(`❌ ${errorMessage}`);
+                });
+                
+                rzp.open();
+                
+            } catch (error) {
+                console.error('Razorpay initialization error:', error);
+                alert('Payment gateway could not be loaded. Please try again.');
+            }
+        }
+
+        // Show/Hide functions
+        function showLoading() {
+            loadingDiv.style.display = 'block';
+            notFoundDiv.style.display = 'none';
+            productContainer.style.display = 'none';
+        }
+
+        function hideLoading() {
+            loadingDiv.style.display = 'none';
+        }
+
+        function showNotFound() {
+            hideLoading();
+            notFoundDiv.style.display = 'block';
+            productContainer.style.display = 'none';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', loadProductDetails);
+        
+        console.log('=== CodeCraft Product Page ===');
+        console.log('Product ID:', getProductIdFromUrl());
+        console.log('Razorpay loaded:', !!window.Razorpay);
+    </script>
+</body>
+</html>

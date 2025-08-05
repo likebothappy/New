@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Your Purchase - CodeCraft</title>
+    <meta name="description" content="Download your purchased source code from CodeCraft securely and instantly.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Fonts are imported in style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Download Page Specific Styles */
+        body {
+            background: var(--background-dark);
+            color: var(--text-white);
+        }
+        
+        /* Navigation (redefined for this specific page to match new header design) */
+        .navbar { 
+            background: var(--secondary-color);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color-new);
+            padding: 0; /* Handled by nav-container */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1280px; /* Max width consistent with other pages */
+            margin: 0 auto;
+            height: 64px; /* Matches new header height */
+            padding: 0 40px; /* Matches new header padding */
+        }
+        
+        .nav-brand { /* Matches new logo style */
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .nav-brand i { /* Icon color */
+            color: var(--text-light-green);
+        }
+        .nav-brand span {
+            color: var(--text-white);
+        }
+        
+        /* Main Container - Mobile First */
+        .download-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px 1rem; /* py-5 from new design */
+        }
+        
+        /* Success Card - Mobile Optimized */
+        .success-card {
+            background: var(--secondary-color); /* Matches new theme */
+            border-radius: 16px;
+            padding: 2.5rem; /* Increased padding */
+            margin: 1rem auto; /* Centered */
+            max-width: 600px; /* Max width for success card */
+            border: 1px solid var(--border-color-new);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 3rem;
+            color: var(--primary-color); /* Matches new theme */
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .success-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-white);
+        }
+        
+        .success-subtitle {
+            color: var(--text-light-green); /* Matches new theme */
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Purchase Details - Mobile Friendly */
+        .purchase-details {
+            background: rgba(1, 152, 99, 0.1); /* Primary color with transparency */
+            border: 1px solid rgba(1, 152, 99, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        
+        .details-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color); /* Matches new theme */
+            font-weight: 600;
+            justify-content: center;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color-new);
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: var(--text-light-green);
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-white);
+            word-break: break-all;
+        }
+        
+        /* Download Button - Touch Friendly */
+        .download-btn {
+            width: 100%;
+            background: var(--primary-color);
+            color: var(--text-white);
+            padding: 1.25rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(1, 152, 99, 0.3);
+            min-height: 56px;
+            margin: 1.5rem 0 0; /* Adjusted margin */
+        }
+        
+        .download-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(1, 152, 99, 0.4);
+        }
+        
+        .download-btn:active {
+            transform: translateY(0);
+        }
+        
+        .security-info {
+            text-align: center;
+            color: var(--text-light-green);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: var(--tertiary-color); /* New background for this info block */
+            border-radius: 8px;
+            border: 1px solid var(--border-color-new);
+        }
+        
+        /* Trust Badges - Mobile Stack */
+        .trust-section {
+            margin-top: 2rem;
+        }
+        
+        .trust-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--secondary-color);
+            border-radius: 12px;
+            border: 1px solid var(--border-color-new);
+        }
+        
+        .trust-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .trust-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-white);
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .trust-content p {
+            font-size: 0.85rem;
+            color: var(--text-light-green);
+            margin: 0;
+        }
+        
+        /* Tablet & Desktop */
+        @media (min-width: 768px) {
+            .download-container {
+                max-width: 960px; /* Matches main content width from new design */
+                padding: 2rem 40px; /* Matches new design padding */
+            }
+            
+            .success-card {
+                padding: 2.5rem;
+            }
+            
+            .success-title {
+                font-size: 2.2rem;
+            }
+            
+            .download-btn {
+                width: auto;
+                min-width: 300px;
+                font-size: 1.2rem;
+            }
+            
+            .trust-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            .detail-row {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .detail-value {
+                text-align: left;
+            }
+            
+            .success-title {
+                font-size: 1.6rem;
+            }
+            /* Header adjustment for very small mobile */
+            .nav-container {
+                padding: 0 16px;
+                height: 56px; /* Smaller header on very small screens */
+            }
+            .nav-brand {
+                font-size: 1.5rem;
+                gap: 10px;
+            }
+            .nav-brand svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (New Design) -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-code"></i>
+                Code<span>Craft</span>
+            </a>
+            <!-- No nav links on download page, but the structure is consistent with others -->
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="download-container">
+        <div class="success-card">
+            <!-- Success Icon -->
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <!-- Success Message -->
+            <h1 class="success-title">Payment Successful! 🎉</h1>
+            <p class="success-subtitle">
+                Thank you for your purchase! Your source code is ready for download.
+            </p>
+
+            <!-- Purchase Details -->
+            <div class="purchase-details">
+                <div class="details-header">
+                    <i class="fas fa-receipt"></i>
+                    Purchase Details
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Product:</span>
+                    <span class="detail-value" id="product-name">Premium Source Code</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Amount:</span>
+                    <span class="detail-value" id="amount-paid">₹70.00</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Payment ID:</span>
+                    <span class="detail-value" id="payment-id">Loading...</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Date:</span>
+                    <span class="detail-value" id="payment-date">Just now</span>
+                </div>
+            </div>
+
+            <!-- Download Button -->
+            <button id="download-btn" class="download-btn" onclick="startDownload()">
+                <i class="fas fa-download"></i>
+                Download Your Files
+            </button>
+            
+            <!-- Security Info -->
+            <div class="security-info">
+                <i class="fas fa-shield-alt"></i>
+                Secure download • Virus-free • 7-day access
+            </div>
+        </div>
+        
+        <!-- Trust Badges -->
+        <div class="trust-section">
+            <div class="trust-grid">
+                <div class="trust-badge">
+                    <div class="trust-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="trust-content">
+                        <h4>Complete Source</h4>
+                        <p>Full project with docs</p>
+                    </div>
+                </div>
+                
+                <div class="trust-badge">
+                    <div class="trust-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="trust-content">
+                        <h4>Commercial License</h4>
+                        <p>Use in your projects</p>
+                    </div>
+                </div>
+                
+                <div class="trust-badge">
+                    <div class="trust-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="trust-content">
+                        <h4>24/7 Support</h4>
+                        <p>Help when you need</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIMPLE WORKING JAVASCRIPT (Original Logic) -->
+    <script type="module">
+        import { productService, utils } from './js/firebase-config.js';
+
+        // Simple variables
+        let downloadUrl = null;
+
+        // Get URL parameters
+        function getParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                payment_id: params.get('payment_id'),
+                product_id: params.get('product_id')
+            };
+        }
+
+        // Format currency (from utils.js)
+        // function formatPrice(amount) {
+        //     return `₹${parseFloat(amount || 70).toFixed(2)}`;
+        // }
+
+        // Load data
+        function loadData() {
+            const { payment_id, product_id } = getParams();
+            
+            console.log('Loading data:', { payment_id, product_id });
+
+            // Get payment data from localStorage
+            if (payment_id) {
+                const paymentKey = 'payment_' + payment_id;
+                const savedPayment = localStorage.getItem(paymentKey);
+                
+                if (savedPayment) {
+                    const payment = JSON.parse(savedPayment);
+                    console.log('Payment found:', payment);
+                    
+                    // Update UI using utils.formatCurrency
+                    document.getElementById('payment-id').textContent = payment_id;
+                    document.getElementById('product-name').textContent = payment.product_title || 'Premium Source Code';
+                    document.getElementById('amount-paid').textContent = utils.formatCurrency(payment.amount);
+                    document.getElementById('payment-date').textContent = new Date().toLocaleDateString();
+                } else {
+                    // If no payment data in localStorage, still try to load product data
+                    console.warn('No payment data found in localStorage for:', payment_id);
+                }
+            } else {
+                console.warn('No payment_id in URL. This page might be accessed directly without a payment.');
+            }
+
+            // Load product data (always try to load product data if product_id is available)
+            if (product_id) {
+                loadProductData(product_id);
+            } else {
+                 console.warn('No product_id in URL. Download might not work without it.');
+            }
+        }
+
+        // Load product data
+        async function loadProductData(productId) {
+            try {
+                const result = await productService.getProduct(productId);
+                
+                if (result.success && result.product) {
+                    const product = result.product;
+                    console.log('Product loaded:', product);
+                    
+                    // Set download URL
+                    downloadUrl = product.downloadUrl || 
+                                 product.downloadLink || 
+                                 product.download_url ||
+                                 product.fileUrl;
+                    
+                    // Update product name (if not already set by payment data)
+                    if (product.title || product.name) {
+                        const productNameElement = document.getElementById('product-name');
+                        if (productNameElement.textContent === 'Premium Source Code' || !productNameElement.textContent) {
+                            productNameElement.textContent = product.title || product.name;
+                        }
+                    }
+                    
+                    console.log('Download URL set to:', downloadUrl);
+                } else {
+                    console.warn('Product load failed for ID:', productId, 'Error:', result.error || 'Unknown');
+                    // Fallback to a generic download URL if product not found
+                    downloadUrl = "https://drive.google.com/file/d/default/view"; 
+                }
+            } catch (error) {
+                console.error('Error in loadProductData:', error);
+                downloadUrl = "https://drive.google.com/file/d/default/view"; // Safety fallback
+            }
+        }
+
+        // SIMPLE DOWNLOAD FUNCTION
+        window.startDownload = function() {
+            const downloadBtn = document.getElementById('download-btn');
+            
+            console.log('Attempting download with URL:', downloadUrl);
+            
+            try {
+                // Button loading state
+                downloadBtn.style.opacity = '0.7';
+                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting Download...';
+                
+                // Get final download URL
+                let finalUrl = downloadUrl;
+                
+                if (!finalUrl || finalUrl === 'null' || finalUrl.trim() === '') {
+                    // Prompt for URL if not found or empty
+                    finalUrl = prompt('Download link not found. Please enter it manually or contact support:', 'https://drive.google.com/file/d/your-file-id/view');
+                    if (!finalUrl || finalUrl.trim() === '') {
+                         throw new Error('Download URL is empty after prompt.');
+                    }
+                }
+
+                if (finalUrl) {
+                    // Handle different URL types for direct download
+                    if (finalUrl.includes('drive.google.com')) {
+                        const fileIdMatch = finalUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+                        if (fileIdMatch && fileIdMatch[1]) {
+                            const fileId = fileIdMatch[1];
+                            const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                            window.open(directUrl, '_blank');
+                            console.log('Google Drive direct download initiated for ID:', fileId);
+                        } else {
+                            // If file ID not found, open the raw Google Drive link
+                            window.open(finalUrl, '_blank');
+                            console.log('Google Drive link opened directly (no file ID found).');
+                        }
+                    } else if (finalUrl.includes('dropbox.com')) {
+                        // For Dropbox, change ?dl=0 to ?dl=1 for direct download
+                        const dropboxUrl = finalUrl.replace('?dl=0', '?dl=1');
+                        window.open(dropboxUrl, '_blank');
+                        console.log('Dropbox direct download initiated.');
+                    } else {
+                        // For other direct links, just open them
+                        window.open(finalUrl, '_blank');
+                        console.log('Generic direct download link opened.');
+                    }
+
+                    // Success feedback
+                    setTimeout(() => {
+                        downloadBtn.innerHTML = '<i class="fas fa-check"></i> Download Started!';
+                        downloadBtn.style.background = 'linear-gradient(135deg, var(--primary-color), var(--primary-light))'; // Green gradient
+                        
+                        setTimeout(() => {
+                            downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download Again';
+                            downloadBtn.style.background = 'var(--primary-color)'; // Back to solid green
+                            downloadBtn.style.opacity = '1';
+                        }, 3000); // Reset button after 3 seconds
+                    }, 1500); // Show "Download Started!" after 1.5 seconds
+
+                    console.log('✅ Download process initiated successfully.');
+                } else {
+                    // This path should ideally be caught by the prompt check above
+                    throw new Error('Download URL is not available.');
+                }
+
+            } catch (error) {
+                console.error('Download error:', error);
+                
+                downloadBtn.style.opacity = '1';
+                downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download Your Files';
+                
+                alert('❌ Download failed. Please ensure the link is valid or contact support if the issue persists.');
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Download page loaded.');
+            loadData();
+        });
+
+    </script>
+</body>
+</html>
