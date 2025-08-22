@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - CodeStore</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Razorpay Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-code"></i> CodeStore
+            </a>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="#" class="nav-link">Categories</a>
+                <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Success Modal (Only Addition) -->
+    <div id="success-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: #1F2937; padding: 2rem; border-radius: 12px; text-align: center; max-width: 400px; width: 90%; border: 1px solid #374151;">
+            <i class="fas fa-check-circle" style="font-size: 3rem; color: #10B981; margin-bottom: 1rem;"></i>
+            <h2 style="color: #F9FAFB; margin-bottom: 1rem;">Payment Successful! 🎉</h2>
+            <p id="success-message" style="color: #9CA3AF; margin-bottom: 1rem;"></p>
+            <div style="width: 100%; height: 4px; background: #374151; border-radius: 2px; margin: 1rem 0; overflow: hidden;">
+                <div style="height: 100%; background: linear-gradient(90deg, #10B981, #059669); width: 0%; animation: fillBar 3s ease forwards;"></div>
+            </div>
+            <p style="color: #10B981; font-weight: 600;">Redirecting to download...</p>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fillBar {
+            to { width: 100%; }
+        }
+        #success-modal {
+            display: none !important;
+        }
+        #success-modal.show {
+            display: flex !important;
+        }
+    </style>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Loading State -->
+        <div id="loading" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Loading product details...</p>
+        </div>
+
+        <!-- Not Found State -->
+        <div id="not-found" class="not-found-container" style="display: none;">
+            <div class="not-found-content">
+                <h2>Product Not Found</h2>
+                <p>The product you're looking for doesn't exist or has been removed.</p>
+                <a href="index.html" class="btn-secondary">Back to Home</a>
+            </div>
+        </div>
+
+        <!-- Product Container -->
+        <div id="product-container" class="product-container" style="display: none;">
+            <div class="product-layout">
+                <!-- Product Image -->
+                <div class="product-image-section">
+                    <img id="product-image" src="" alt="Product Image" class="product-main-image">
+                </div>
+
+                <!-- Product Details -->
+                <div class="product-details-section">
+                    <h1 id="product-title" class="product-title"></h1>
+                    <p id="product-price" class="product-price"></p>
+                    
+                    <div class="product-description">
+                        <h3>Description</h3>
+                        <p id="product-description"></p>
+                    </div>
+
+                    <div class="product-features">
+                        <h3>What You Get</h3>
+                        <ul>
+                            <li><i class="fas fa-code"></i> Complete source code</li>
+                            <li><i class="fas fa-file-alt"></i> Documentation and setup guide</li>
+                            <li><i class="fas fa-download"></i> Instant download after payment</li>
+                            <li><i class="fas fa-certificate"></i> Commercial usage rights</li>
+                        </ul>
+                    </div>
+
+                    <div class="purchase-section">
+                        <button id="buy-now-btn" class="btn-primary btn-large">
+                            <i class="fas fa-shopping-cart"></i> Buy Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="trust-badges">
+                <div class="badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <h4>Secure Payment</h4>
+                        <p>Powered by Razorpay, India's most trusted payment gateway.</p>
+                    </div>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-bolt"></i>
+                    <div>
+                        <h4>Instant Download</h4>
+                        <p>Get immediate access to your purchase after payment.</p>
+                    </div>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-briefcase"></i>
+                    <div>
+                        <h4>Commercial License</h4>
+                        <p>Use the code in your commercial projects without restrictions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-code"></i> CodeStore</h3>
+                <p>High-quality, production-ready source code for modern developers.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CodeStore. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- YOUR EXACT ORIGINAL JAVASCRIPT -->
+    <script type="module">
+        import { productService, utils } from './js/firebase-config.js';
+
+        // DOM Elements - EXACTLY YOUR ORIGINAL CODE
+        const loadingDiv = document.getElementById('loading');
+        const notFoundDiv = document.getElementById('not-found');
+        const productContainer = document.getElementById('product-container');
+        const productImage = document.getElementById('product-image');
+        const productTitle = document.getElementById('product-title');
+        const productPrice = document.getElementById('product-price');
+        const productDescription = document.getElementById('product-description');
+        const buyNowBtn = document.getElementById('buy-now-btn');
+
+        // Success modal elements
+        const successModal = document.getElementById('success-modal');
+        const successMessage = document.getElementById('success-message');
+
+        // Current product storage - EXACTLY YOUR ORIGINAL CODE
+        let currentProduct = null;
+
+        // Get product ID from URL - EXACTLY YOUR ORIGINAL CODE
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Load product details - EXACTLY YOUR ORIGINAL CODE
+        async function loadProductDetails() {
+            const productId = getProductIdFromUrl();
+            
+            if (!productId) {
+                showNotFound();
+                return;
+            }
+
+            try {
+                showLoading();
+                const result = await productService.getProduct(productId);
+                
+                if (result.success && result.product) {
+                    currentProduct = result.product;
+                    displayProduct(result.product);
+                } else {
+                    showNotFound();
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showNotFound();
+            }
+        }
+
+        // Display product details - EXACTLY YOUR ORIGINAL CODE
+        function displayProduct(product) {
+            hideLoading();
+            
+            // Update page title
+            document.title = `${product.title || product.name} - CodeStore`;
+            
+            // Display product image - MAIN FIX FOR IMAGE ISSUE
+            if (product.imageUrl || product.image) {
+                productImage.src = product.imageUrl || product.image;
+                productImage.alt = product.title || product.name;
+                productImage.style.display = 'block';
+                
+                productImage.onerror = function() {
+                    this.src = 'https://via.placeholder.com/500x400/6366f1/white?text=Image+Not+Available';
+                };
+            } else {
+                productImage.src = 'https://via.placeholder.com/500x400/6366f1/white?text=No+Image';
+            }
+            
+            // Display other details
+            productTitle.textContent = product.title || product.name || 'Untitled Product';
+            productPrice.textContent = utils.formatCurrency(product.price || 0);
+            productDescription.textContent = product.description || 'No description available.';
+            
+            // Setup buy button - ONLY CHANGE: ENHANCED RAZORPAY
+            if (buyNowBtn) {
+                buyNowBtn.onclick = () => buyNow(product);
+            }
+            
+            productContainer.style.display = 'block';
+            console.log('Product displayed:', product);
+        }
+
+        // ENHANCED RAZORPAY FUNCTION - ONLY THIS IS MODIFIED
+        function buyNow(product) {
+            if (!window.Razorpay) {
+                alert('Payment gateway not available. Please refresh the page.');
+                return;
+            }
+
+            // Enhanced Razorpay options - Professional Implementation
+            const options = {
+                key: 'rzp_live_R6hTxTOb79IftT', // Your test key
+                amount: (product.price || 70) * 100, // Amount in paise
+                currency: 'INR',
+                name: 'CodeStore',
+                description: product.title || product.name,
+                image: 'https://cdn-icons-png.flaticon.com/512/1006/1006555.png',
+                
+                // ENHANCED SUCCESS HANDLER
+                handler: function(response) {
+                    console.log('Payment Success:', response);
+                    
+                    // Store payment data
+                    const paymentData = {
+                        payment_id: response.razorpay_payment_id,
+                        order_id: response.razorpay_order_id,
+                        signature: response.razorpay_signature,
+                        product_id: product.id,
+                        product_title: product.title || product.name,
+                        amount: product.price,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('payment_' + response.razorpay_payment_id, JSON.stringify(paymentData));
+                    
+                    // Show enhanced success modal
+                    successMessage.innerHTML = `
+                        Payment ID: <strong>${response.razorpay_payment_id}</strong><br>
+                        Product: <strong>${paymentData.product_title}</strong>
+                    `;
+                    
+                    successModal.classList.add('show');
+                    
+                    // Redirect to download page
+                    setTimeout(() => {
+                        window.location.href = `download.html?payment_id=${response.razorpay_payment_id}&product_id=${product.id}`;
+                    }, 3000);
+                },
+                
+                // Prefill customer data
+                prefill: {
+                    name: 'Customer',
+                    email: 'customer@example.com',
+                    contact: '9999999999'
+                },
+                
+                // Enhanced notes
+                notes: {
+                    product_id: product.id,
+                    product_name: product.title || product.name,
+                    website: 'CodeStore'
+                },
+                
+                // Theme
+                theme: {
+                    color: '#6D28D9'
+                },
+                
+                // Enhanced modal handling
+                modal: {
+                    ondismiss: function() {
+                        console.log('Payment cancelled by user');
+                    }
+                }
+            };
+
+            try {
+                // Create and open Razorpay
+                const rzp = new Razorpay(options);
+                
+                // ENHANCED PAYMENT FAILED HANDLER
+                rzp.on('payment.failed', function(response) {
+                    console.error('Payment failed:', response);
+                    
+                    let errorMessage = 'Payment failed. Please try again.';
+                    
+                    if (response.error) {
+                        const error = response.error;
+                        
+                        switch(error.code) {
+                            case 'PAYMENT_CANCELLED':
+                                errorMessage = 'Payment was cancelled.';
+                                break;
+                            case 'PAYMENT_TIMED_OUT':
+                                errorMessage = 'Payment timed out. Please try again.';
+                                break;
+                            case 'AUTHENTICATION_FAILED':
+                                errorMessage = 'Authentication failed. Please check your details.';
+                                break;
+                            case 'INSUFFICIENT_FUNDS':
+                                errorMessage = 'Insufficient funds. Please check your balance.';
+                                break;
+                            case 'CARD_DECLINED':
+                                errorMessage = 'Card declined. Please try different payment method.';
+                                break;
+                            default:
+                                errorMessage = error.description || 'Payment failed due to technical issue.';
+                        }
+                    }
+                    
+                    alert(`❌ ${errorMessage}`);
+                });
+                
+                // Open payment gateway
+                rzp.open();
+                
+            } catch (error) {
+                console.error('Razorpay error:', error);
+                alert('Payment gateway error. Please try again.');
+            }
+        }
+
+        // Show/Hide functions - EXACTLY YOUR ORIGINAL CODE
+        function showLoading() {
+            loadingDiv.style.display = 'block';
+            notFoundDiv.style.display = 'none';
+            productContainer.style.display = 'none';
+        }
+
+        function hideLoading() {
+            loadingDiv.style.display = 'none';
+        }
+
+        function showNotFound() {
+            hideLoading();
+            notFoundDiv.style.display = 'block';
+            productContainer.style.display = 'none';
+        }
+
+        // Initialize page - EXACTLY YOUR ORIGINAL CODE
+        document.addEventListener('DOMContentLoaded', loadProductDetails);
+        
+        // Debug info - EXACTLY YOUR ORIGINAL CODE
+        console.log('=== CodeStore Product Page ===');
+        console.log('Product ID:', getProductIdFromUrl());
+        console.log('Razorpay loaded:', !!window.Razorpay);
+
+    </script>
+</body>
+</html>
